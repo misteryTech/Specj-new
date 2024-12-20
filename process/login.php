@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $result->fetch_assoc();
 
         // Verify the provided password against the hashed password in the database
-        if ($password === $user['password']) {
+        if ($password === $user['password']) { // Replace with password_verify if using hashed passwords
             // Set session variables
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['firstname'] = $user['firstname'];
@@ -36,14 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($user['role'] === 'admin') {
                 header("Location: ../admin/dashboard.php"); // Admin dashboard
             } else {
-                header("Location: user/dashboard.php"); // User dashboard
+                header("Location: ../user/dashboard.php"); // User dashboard
             }
             exit();
         } else {
-            echo "Invalid password.";
+            echo "<script>alert('Incorrect password!'); window.location.href = '../login.php';</script>";
+            exit();
         }
     } else {
-        echo "Invalid username/email or password.";
+        echo "<script>alert('User not found!'); window.location.href = '../login.php';</script>";
+        exit();
     }
 
     // Close statement and connection

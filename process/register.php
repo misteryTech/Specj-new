@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Execute the query
     if ($stmt->execute()) {
-        echo "User successfully registered.";
+            echo"<script>Alert Succesfully Registered</script>";
+            header("Location: ../admin/dashboard.php"); // Admin dashboard
     } else {
         echo "Error: " . $stmt->error;
     }
