@@ -13,9 +13,11 @@ $firstname = $_SESSION['firstname'];
 $lastname = $_SESSION['lastname'];
 $transaction = "Online";
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedproduct = json_decode($_POST['selectedproduct'], true);
     $product_transaction = $_POST['product_transaction'];
+    $services_id =  $_POST["services_id"];
 
     // Validation: Check if no products are selected
     if (empty($selectedproduct)) {
@@ -63,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $productId = $product['productId'];
             $quantity = $product['quantity'];
 
-            $detailQuery = "INSERT INTO product_transaction (transaction_id, product_id, quantity) VALUES (?, ?, ?)";
+            $detailQuery = "INSERT INTO product_transaction (transaction_id, product_id, quantity, service_id) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($detailQuery);
-            $stmt->bind_param("iii", $transactionId, $productId, $quantity);
+            $stmt->bind_param("iiii", $transactionId, $productId, $quantity, $services_id);
             $stmt->execute();
             $stmt->close();
         }

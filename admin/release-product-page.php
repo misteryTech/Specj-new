@@ -7,16 +7,27 @@ include("../layout/header.php");
 <?php
 include("../layout/top-nav.php");
 include("side-bar.php");
+
+
+// Check if a transaction ID is provided
+if (!isset($_GET['serviceId'])) {
+    echo "<script>alert('Transaction ID is missing.');</script>";
+    echo "<script>window.location.href='transactions.php';</script>";
+    exit();
+}
+
+$serviceId = intval($_GET['serviceId']);
 ?>
 
 <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>Products</h1>
+  <h1>Services ID: <?= $serviceId ?></h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active">List of Products</li>
+      <li class="breadcrumb-item active">Release Products</li>
     </ol>
+    
     <!-- Cart Button -->
     <div class="text-end mt-3">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartModal">
@@ -103,8 +114,10 @@ include("side-bar.php");
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form id="serviceForm" action="process/transaction-product.php" method="POST">
+                    <form id="serviceForm" action="process/release-service-product.php" method="POST">
+                        
                         <input type="hidden" id="selectedproduct" name="selectedproduct">
+                        <input type="hidden" id="services_id" name="services_id" value="<?= $serviceId ?>">
                         <input type="hidden" id="product_transaction" name="product_transaction" value="Product">
                         <button type="submit" class="btn btn-success">Submit</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

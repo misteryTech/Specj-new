@@ -32,6 +32,33 @@ include("side-bar.php");
 
           <!-- Multi Columns Form -->
           <form id="serviceForm" class="row g-3" action="process/transction-registration.php" method="POST">
+
+  
+                            <h6>Customer Information</h6>
+                            <hr>
+                     
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+
+                     
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                      
+                        <div class="col-md-6">
+                            <label for="set-sched" class="form-label">Set Schedule</label>
+                            <input type="date" class="form-control" id="schedule" name="schedule" required>
+                        </div>
+
+          
               <?php
               // Fetch services from the database
               $sql = "SELECT id, service_name, category, price FROM motorcycle_services ORDER BY service_name ASC";

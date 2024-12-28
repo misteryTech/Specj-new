@@ -90,29 +90,58 @@ include("side-bar.php");
 
     <!-- Modal -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul id="selectedProduct" class="list-group"></ul>
-                    <div class="text-end mt-3">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="serviceForm" action="process/transaction-product.php" method="POST">
+                    <!-- Row for input fields -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="schedule" class="form-label">Set Schedule</label>
+                            <input type="date" class="form-control" id="schedule" name="schedule" required>
+                        </div>
+                    </div>
+
+                    <!-- Selected Products -->
+                    <ul id="selectedProduct" class="list-group mb-3"></ul>
+
+                    <!-- Total Price -->
+                    <div class="text-end">
                         <h5>Total: ₱ <span id="totalPrice">0</span></h5>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <form id="serviceForm" action="process/transaction-product.php" method="POST">
-                        <input type="hidden" id="selectedproduct" name="selectedproduct">
-                        <input type="hidden" id="product_transaction" name="product_transaction" value="Product">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </form>
-                </div>
+
+                    <!-- Hidden inputs -->
+                    <input type="hidden" id="selectedproduct" name="selectedproduct">
+                    <input type="hidden" id="product_transaction" name="product_transaction" value="Product">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="serviceForm" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
+
 </div>
 
 </section>
