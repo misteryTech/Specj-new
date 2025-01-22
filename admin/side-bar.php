@@ -55,7 +55,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 
         <!-- Services Nav (Inactive) -->
-        <li class="nav-item <?= ($current_page == 'services.php') ? 'active' : '' ?>">
+        <li class="nav-item <?= ($current_page == 'services.php'  || $current_page == 'services.php') ? 'active' : '' ?>">
             <a class="nav-link" href="services.php">
                 <i class="bi bi-book"></i>
                 <span>Services</span>

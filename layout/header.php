@@ -26,7 +26,7 @@ $role = $_SESSION['role'];
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <title>Specj Garage</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -46,14 +46,35 @@ $role = $_SESSION['role'];
   <link href="../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
+  
   <!-- Template Main CSS File -->
   <link href="../assets/css/style.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
- 
+ <!-- FullCalendar CSS -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+
+<!-- FullCalendar JS -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+<link href='https://fullcalendar.io/releases/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+<script src='https://fullcalendar.io/releases/fullcalendar/3.10.2/lib/jquery.min.js'></script>
+<script src='https://fullcalendar.io/releases/fullcalendar/3.10.2/lib/moment.min.js'></script>
+<script src='https://fullcalendar.io/releases/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+
 
 </head>
 <?php
   include("../process/connection.php");
 ?>
+<style>
+  .dashboard .out-stock .card-icon {
+    color: #ffffff;
+    background:rgba(230, 81, 55, 0.62);
+}
+
+
+.dashboard .expired-item .card-icon {
+    color:rgb(69, 77, 179);
+    background:rgba(230, 81, 55, 0.62);
+}
+</style>
