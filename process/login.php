@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
     } else {
-        echo "<script>alert('User not found!'); window.location.href = '../login.php';</script>";
+        echo "<script>alert('User not found!'); window.location.href = '../customer_login.php';</script>";
         exit();
     }
 

@@ -40,7 +40,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .service-description {
+        .service-category {
             margin-top: 10px;
         }
 
@@ -84,15 +84,15 @@
                         include("process/connection.php");
 
                         // Fetch registered services
-                        $sql = "SELECT id, services_name FROM services_tbl";
-                        $result = $connection->query($sql);
+                        $sql = "SELECT id, service_name FROM motorcycle_services";
+                        $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
                             $isFirst = true; // For making the first tab active
                             while ($row = $result->fetch_assoc()) {
                                 $activeClass = $isFirst ? 'active' : '';
                                 echo '<li class="nav-item">';
-                                echo '<a class="nav-link ' . $activeClass . '" id="tab-' . htmlspecialchars($row['id']) . '" data-bs-toggle="pill" href="#service-' . htmlspecialchars($row['id']) . '" role="tab">' . htmlspecialchars($row['services_name']) . '</a>';
+                                echo '<a class="nav-link ' . $activeClass . '" id="tab-' . htmlspecialchars($row['id']) . '" data-bs-toggle="pill" href="#service-' . htmlspecialchars($row['id']) . '" role="tab">' . htmlspecialchars($row['service_name']) . '</a>';
                                 echo '</li>';
                                 $isFirst = false;
                             }
@@ -115,15 +115,15 @@
                                 $activeClass = $isFirst ? 'show active' : '';
                                 echo '<div class="tab-pane fade ' . $activeClass . '" id="service-' . htmlspecialchars($row['id']) . '" role="tabpanel">';
                                 echo '<div class="service-content">';
-                                echo '<h4>' . htmlspecialchars($row['services_name']) . '</h4>';
+                                echo '<h4>' . htmlspecialchars($row['service_name']) . '</h4>';
 
-                                // Fetch service details (description, price)
-                                $sqlDetails = "SELECT description, price FROM services_tbl WHERE id=" . htmlspecialchars($row['id']);
-                                $detailsResult = $connection->query($sqlDetails);
+                                // Fetch service details (category, price)
+                                $sqlDetails = "SELECT category, price FROM motorcycle_services WHERE id=" . htmlspecialchars($row['id']);
+                                $detailsResult = $conn->query($sqlDetails);
 
                                 if ($detailsResult->num_rows > 0) {
                                     $detailsRow = $detailsResult->fetch_assoc();
-                                    echo '<p class="service-description">' . htmlspecialchars($detailsRow['description']) . '</p>';
+                                    echo '<p class="service-category">' . htmlspecialchars($detailsRow['category']) . '</p>';
                                     echo '<p>Price: ₱ ' . htmlspecialchars($detailsRow['price']) . '</p>';
                                 }
 
@@ -133,7 +133,7 @@
                                 $isFirst = false;
                             }
                         }
-                        $connection->close();
+                        $conn->close();
                         ?>
                     </div>
                 </div>
