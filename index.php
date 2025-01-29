@@ -50,7 +50,7 @@
 
     <footer class="text-center footer text-faded py-5">
         <div class="container">
-            <p class="m-0 small">Copyright © SPECj 2024</p>
+            <p class="m-0 small">Copyright © SPECj 2025</p>
         </div>
     </footer>
 
