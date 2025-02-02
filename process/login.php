@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             exit();
         } else {
-            echo "<script>alert('Incorrect password!'); window.location.href = '../login.php';</script>";
+            echo "<script>alert('Incorrect password!'); window.location.href = '../customer_login.php';</script>";
             exit();
         }
     } else {

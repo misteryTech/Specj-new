@@ -28,7 +28,7 @@
                 <div class="col-xl-4">
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                            <h2><?php echo htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']); ?></h2>
+                            <h2><?= $fullname; ?></h2>
                             <h3>Administrator</h3>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                                     <!-- Profile Edit Form -->
                                     <form action="process_code/user_profile_edit.php" method="POST">
-                                        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['id']); ?>">
+                                        <input type="text" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>">
 
                                         <div class="row mb-3">
                                             <label for="firstname" class="col-md-4 col-lg-3 col-form-label">First Name</label>
