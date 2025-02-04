@@ -44,7 +44,15 @@
                     <i class="bi bi-calendar-check"></i>
                     </div>
                     <div class="ps-3">
-                  
+                    <h6>
+                        <?php
+                        // Fetch total customer count from the database
+                        $sql = "SELECT COUNT(*) AS total_services FROM services_transaction WHERE status = 'Scheduled'"; // Adjust table name as needed
+                        $result = $conn->query($sql);
+                        $row = $result->fetch_assoc();
+                        echo $row['total_services'] ?? 0; // Display 0 if no data
+                        ?>
+                    </h6>
                    
 
                     </div>
@@ -68,7 +76,15 @@
                     </div>
                     <div class="ps-3">
                    
-                   
+                    <h6>
+                        <?php
+                        // Fetch total customer count from the database
+                        $sql = "SELECT COUNT(*) AS total_customers FROM users"; // Adjust table name as needed
+                        $result = $conn->query($sql);
+                        $row = $result->fetch_assoc();
+                        echo $row['total_customers'] ?? 0; // Display 0 if no data
+                        ?>
+                    </h6>
                     </div>
                   </div>
                 </div>
@@ -111,8 +127,16 @@
                     <i class="bi bi-box"></i>
                     </div>
                     <div class="ps-3">
-                   
-                   
+                    <h6>
+                      <?php
+                      // Fetch total count of parts that are out of stock or below reorder point
+                      $sql_parts = "SELECT COUNT(*) AS OT FROM parts_registration WHERE quantity_stock <= reorder_point"; 
+                      $result_parts = $conn->query($sql_parts);
+                      $row_parts = $result_parts->fetch_assoc();
+                      echo $row_parts['OT'] ?? 0; // Display 0 if no data
+                      ?>
+                  </h6>
+
                     </div>
                   </div>
                 </div>

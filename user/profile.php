@@ -38,7 +38,7 @@
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                             <h2><?= $customer_name; ?></h2>
-                            <h3>Administrator</h3>
+                            <h3>Customer</h3>
                         </div>
                     </div>
                 </div>

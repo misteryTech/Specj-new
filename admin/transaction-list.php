@@ -31,7 +31,7 @@ include("side-bar.php");
           <!-- Recent Sales -->
           <?php
           // Fetch data from the transactions table
-          $query = "SELECT * FROM transactions";
+          $query = "SELECT * FROM transactions ORDER BY created_at DESC";
           $result = $conn->query($query);
           ?>
 

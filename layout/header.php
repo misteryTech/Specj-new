@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit(); // Stop further execution
 }
-
+$user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 $fullname = $_SESSION['firstname']. ' '. $_SESSION['lastname'];
 $role = $_SESSION['role'];

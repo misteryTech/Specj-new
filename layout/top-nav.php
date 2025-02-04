@@ -9,12 +9,7 @@
   <i class="bi bi-list toggle-sidebar-btn"></i>
 </div><!-- End Logo -->
 
-<div class="search-bar">
-  <form class="search-form d-flex align-items-center" method="POST" action="#">
-    <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-    <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-  </form>
-</div><!-- End Search Bar -->
+
 
 <nav class="header-nav ms-auto">
   <ul class="d-flex align-items-center">
@@ -26,45 +21,33 @@
     </li><!-- End Search Icon-->
 
 
-    <li class="nav-item dropdown">
-
-      <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-        <i class="bi bi-chat-left-text"></i>
-        <span class="badge bg-success badge-number">3</span>
-      </a><!-- End Messages Icon -->
-
-      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-        <li class="dropdown-header">
-          You have 3 new messages
-          <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-        </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-      
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li class="dropdown-footer">
-          <a href="#">Show all messages</a>
-        </li>
-
-      </ul><!-- End Messages Dropdown Items -->
-
-    </li><!-- End Messages Nav -->
 
     <li class="nav-item dropdown pe-3">
 
+    
+    <?php
+       // Fetch user details from the database
+       $stmt = $conn->prepare("SELECT firstname, lastname, email, username, password FROM users WHERE id = ?");
+       $stmt->bind_param("i", $user_id);
+       $stmt->execute();
+       $result_customer = $stmt->get_result();
+       $customer_result = $result_customer->fetch_assoc();
+
+       
+       $customer_fullname = $customer_result['firstname']. ' ' . $customer_result['lastname'];
+       $customer_username = $customer_result['username'];
+      ?>
+
+
       <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
       
-        <span class="d-none d-md-block dropdown-toggle ps-2"><?= $username; ?></span>
+        <span class="d-none d-md-block dropdown-toggle ps-2"><?= $customer_username; ?></span>
       </a><!-- End Profile Iamge Icon -->
 
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+
         <li class="dropdown-header">
-          <h6><?= $fullname; ?></h6>
+          <h6><?= $customer_fullname; ?></h6>
           <span><?= $role;  ?> </span>
         </li>
         <li>
