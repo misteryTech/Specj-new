@@ -119,15 +119,11 @@
                         </h2>
                         <ul class="list-unstyled text-start mx-auto list-hours mb-5">
                             <li class="d-flex list-unstyled-item list-hours-item">Sunday<span class="ms-auto">Closed</span></li>
-                            <li class="d-flex list-unstyled-item list-hours-item">Monday<span class="ms-auto">7:00 AM to 8:00 PM</span></li>
-                            <li class="d-flex list-unstyled-item list-hours-item">Tuesday<span class="ms-auto">7:00 AM to 8:00 PM</span></li>
-                            <li class="d-flex list-unstyled-item list-hours-item">Wednesday<span class="ms-auto">7:00 AM to 8:00 PM</span></li>
-                            <li class="d-flex list-unstyled-item list-hours-item">Thursday<span class="ms-auto">7:00 AM to 8:00 PM</span></li>
-                            <li class="d-flex list-unstyled-item list-hours-item">Friday<span class="ms-auto">7:00 AM to 8:00 PM</span></li>
-                            <li class="d-flex list-unstyled-item list-hours-item">Saturday<span class="ms-auto">9:00 AM to 5:00 PM</span></li>
+                            <li class="d-flex list-unstyled-item list-hours-item">Monday - Saturday<span class="ms-auto">7:00 AM to 8:00 PM</span></li>
+                   
                         </ul>
                         <p class="address mb-5">
-                            <em><strong>1116 Orchard Street</strong><span><br>Golden Valley, Minnesota</span></em>
+                            <em><strong>016 Quezon Avenue Corner albano/tieza st.</strong><span><br>General Santos City</span></em>
                         </p>
                         <p class="address mb-0">
                             <small><em>Call Anytime</em></small><span><br>(317) 585-8468</span>
