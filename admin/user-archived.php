@@ -14,11 +14,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>User</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="index.html">User</a></li>
+          <li class="breadcrumb-item active">Archive User</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -33,7 +33,7 @@
             <!-- Recent Sales -->
             <?php
             // Fetch data from the users table
-            $query = "SELECT id, firstname, lastname, email, username FROM users";
+            $query = "SELECT id, firstname, lastname, email, username FROM users WHERE archive = '0'";
             $result = $conn->query($query);
             ?>
 
@@ -73,6 +73,12 @@
                                 <td>{$row['firstname']} {$row['lastname']}</td>
                                 <td>{$row['username']}</td>
                                 <td>{$row['email']}</td>
+
+                                
+                        <td>
+                            <a href='process/archive-user.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to archive this User?\")'>Archive</a>
+                        </td>
+
                               </tr>";
                         }
                       } else {

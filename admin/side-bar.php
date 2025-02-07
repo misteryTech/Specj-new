@@ -25,8 +25,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </a>
                 </li>
                 <li>
-                    <a href="tables-data.html" class="<?= $current_page == 'tables-data.html' ? 'active' : '' ?>">
-                        <i class="bi bi-circle"></i><span>Data Tables</span>
+                    <a href="user-archived.php" class="<?= $current_page == 'user-archived.php' ? 'active' : '' ?>">
+                        <i class="bi bi-circle"></i><span>Archive User</span>
                     </a>
                 </li>
             </ul>
@@ -63,7 +63,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li><!-- End Services Nav -->
 
         <!-- Product Nav -->
-        <li class="nav-item <?= ($current_page == 'product-registration.php' || $current_page == 'product-list.php') ? 'active' : '' ?>">
+        <li class="nav-item <?= ($current_page == 'product-registration.php' || $current_page == 'product-list.php'  || $current_page == 'archive-product.php') ? 'active' : '' ?>">
             <a class="nav-link collapsed" data-bs-target="#product-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-box"></i><span>Product</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
@@ -78,6 +78,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <i class="bi bi-circle"></i><span>List of Product</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="archive-product.php" class="<?= $current_page == 'archive-product.php' ? 'active' : '' ?>">
+                        <i class="bi bi-circle"></i><span>Archive Products</span>
+                    </a>
+                </li>
+
             </ul>
         </li><!-- End Product Nav -->
 

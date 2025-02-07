@@ -45,7 +45,7 @@
     <tbody>
         <?php
         // Fetch services from the database (including the ID)
-        $sql = "SELECT * FROM parts_registration ORDER BY parts_name ASC";
+        $sql = "SELECT * FROM parts_registration WHERE archive = '0' ORDER BY parts_name ASC";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -68,7 +68,7 @@
                                   data-condition='{$row['condition']}'
                                   data-price='{$row['price']}'>Edit</button>
 
-                            <a href='archive-service.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to archive this service?\")'>Archive</a>
+                            <a href='process/archive-products.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to archive this product?\")'>Archive</a>
                         </td>
                     </tr>";
             }
