@@ -10,15 +10,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $category = $_POST['category'];
     $price = $_POST['price'];
+    $archive ='0';
 
     // Prepare the SQL insert query
-    $sql = "INSERT INTO motorcycle_services (service_name, service_type, category, price) 
-            VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO motorcycle_services (service_name, service_type, category, price, archive) 
+            VALUES (?, ?, ?, ?, ?)";
 
     // Prepare the statement
     if ($stmt = $conn->prepare($sql)) {
         // Bind the parameters to the statement
-        $stmt->bind_param("sssd", $service_name, $service_type, $category, $price);
+        $stmt->bind_param("sssd", $service_name, $service_type, $category, $price, $archive);
 
         // Execute the statement
         if ($stmt->execute()) {

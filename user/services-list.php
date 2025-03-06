@@ -34,7 +34,7 @@ include("side-bar.php");
           <form id="serviceForm" class="row g-3" action="process/transction-registration.php" method="POST">
               <?php
               // Fetch services from the database
-              $sql = "SELECT id, service_name, category, price FROM motorcycle_services ORDER BY service_name ASC";
+              $sql = "SELECT id, service_name, category, price FROM motorcycle_services WHERE archive = '0' ORDER BY service_name ASC";
               $result = $conn->query($sql);
               ?>
 

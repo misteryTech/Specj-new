@@ -13,26 +13,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['service_id'], $_POST[
         exit();
     }
 
-    // Update the service schedule and status
-    $updateQuery = "
-        UPDATE services_transaction
-        SET set_schedule = ?, status = 'Scheduled'
-        WHERE service_id = ? AND transaction_id = ?
-    ";
+    // Start a transaction to ensure data consistency
+    $conn->begin_transaction();
 
-    if ($stmt = $conn->prepare($updateQuery)) {
-        $stmt->bind_param("sii", $scheduleDate, $serviceId, $transactionId);
-        
-        // Execute the query
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Service schedule set successfully.']);
+    try {
+        // Update the status to 'onprocess' in the transactions table (change to 'Scheduled' as needed)
+        $updateTransactionStatusQuery = "
+            UPDATE transactions
+            SET status = 'Scheduled'
+            WHERE id = ?
+        ";
+
+        if ($stmt = $conn->prepare($updateTransactionStatusQuery)) {
+            $stmt->bind_param("i", $transactionId);  // Corrected binding to match the query
+            // Execute the query to set status to 'Scheduled'
+            if (!$stmt->execute()) {
+                throw new Exception('Error updating transaction status in transactions table.');
+            }
+            $stmt->close();
         } else {
-            echo json_encode(['success' => false, 'message' => 'Error updating service schedule.']);
+            throw new Exception('Error preparing the status update query for transactions table.');
         }
 
-        $stmt->close();
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Error preparing the query.']);
+        // Update the service schedule and set the status to 'Scheduled' in services_transaction table
+        $updateScheduleQuery = "
+            UPDATE services_transaction
+            SET set_schedule = ?, status = 'Scheduled'
+            WHERE service_id = ? AND transaction_id = ?
+        ";
+
+        if ($stmt = $conn->prepare($updateScheduleQuery)) {
+            $stmt->bind_param("sii", $scheduleDate, $serviceId, $transactionId);  // Corrected parameter binding
+            // Execute the query to update the schedule
+            if (!$stmt->execute()) {
+                throw new Exception('Error updating service schedule in services_transaction table.');
+            }
+            $stmt->close();
+        } else {
+            throw new Exception('Error preparing the schedule update query for services_transaction table.');
+        }
+
+        // Commit the transaction if both updates are successful
+        $conn->commit();
+
+        echo json_encode(['success' => true, 'message' => 'Service schedule set successfully, status updated to Scheduled.']);
+    } catch (Exception $e) {
+        // Rollback the transaction in case of any errors
+        $conn->rollback();
+        
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Missing required parameters.']);

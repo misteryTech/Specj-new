@@ -18,10 +18,12 @@ header('Content-Type: application/json');
 
 // Query to fetch scheduled services with status "scheduled"
 $query = "
-    SELECT *
-    FROM transactions
- 
-    WHERE user_id = '$user_id' AND transaction = 'Services'
+    SELECT T.*, ST.*
+
+
+    FROM transactions AS T
+    INNER JOIN services_transaction AS ST ON ST.transaction_id = T.id
+    WHERE T.user_id = '$user_id' AND T.transaction = 'Services'
 "; // Adjust table and column names as per your schema
 
 $result = $conn->query($query);
@@ -33,7 +35,7 @@ if ($result->num_rows > 0) {
         $events[] = [
             'title' => $row['transaction'] , // Combine service name and price
             'tranSaction' => $row['transaction'] ,
-            'start' => $row['created_at'] ,
+            'start' => $row['set_schedule'] ,
             'totalAmount' => $row['total_amount']// Scheduled date in YYYY-MM-DD format    
         ];
     }

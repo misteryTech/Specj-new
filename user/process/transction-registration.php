@@ -13,6 +13,7 @@ $userId = $_SESSION['user_id'];
 $firstname = $_SESSION['firstname'];
 $lastname = $_SESSION['lastname'];
 $transaction = "Online";
+$status = "Onprocess";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedServices = json_decode($_POST['selectedServices'], true);
@@ -47,18 +48,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Insert transaction details
-        $transactionSql = "INSERT INTO transactions (user_id, firstname, lastname, total_amount, created_at, type_transaction, transaction) VALUES (?, ?, ?, ?, NOW(), ?, ?)";
+        $transactionSql = "INSERT INTO transactions (user_id, firstname, lastname, total_amount, created_at, type_transaction, `transaction`, `status`) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $stmt = $conn->prepare($transactionSql);
-        $stmt->bind_param("issdss", $userId, $firstname, $lastname, $totalAmount, $transaction, $product_transaction);
+        $stmt->bind_param("issdsss", $userId, $firstname, $lastname, $totalAmount, $transaction, $product_transaction, $status);
         $stmt->execute();
         $transactionId = $stmt->insert_id;
         $stmt->close();
 
         // Insert each selected service into `services_transaction`
         foreach ($selectedServices as $serviceId) {
-            $detailSql = "INSERT INTO services_transaction (transaction_id, service_id) VALUES (?, ?)";
+            $detailSql = "INSERT INTO services_transaction (transaction_id, service_id, `status`) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($detailSql);
-            $stmt->bind_param("ii", $transactionId, $serviceId);
+            $stmt->bind_param("iis", $transactionId, $serviceId, $status);
             $stmt->execute();
             $stmt->close();
         }

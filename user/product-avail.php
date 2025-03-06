@@ -45,7 +45,14 @@ include("side-bar.php");
                         while ($row = $result->fetch_assoc()) {
                             echo '<div class="col-md-4 mb-3 product-item" data-name="' . htmlspecialchars($row['parts_name']) . '">';
                             echo '<div class="card" style="width: 100%;">';
-                            echo '<img class="card-img-top" src="../admin/process/' . htmlspecialchars($row['image']) . '" alt="Product Image" style="width: 100%; height: 200px; object-fit: cover;">';
+                            if (!empty($row['image'])) {
+                                echo '<img class="card-img-top" src="../admin/process/' . htmlspecialchars($row['image']) . '" 
+                                      alt="Product Image" style="width: 100%; height: 200px; object-fit: cover;">';
+                            } else {
+                                echo '<img class="card-img-top" src="../admin/process/default-image.jpg" 
+                                      alt="No Image Available" style="width: 100%; height: 200px; object-fit: cover;">';
+                            }
+                            
                             echo '<div class="card-body">';
                             echo '<h5 class="card-title">' . htmlspecialchars($row['parts_name']) . '</h5>';
                             echo '<p class="card-text">Category: ' . htmlspecialchars($row['category']) . '</p>';

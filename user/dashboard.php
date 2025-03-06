@@ -92,9 +92,10 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th>Scheduled Date</th>
                             <th>Total Amount</th>
                             <th>Transaction</th>
+                            <th>Date Request</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,9 +104,16 @@
 
                         // Fetch the list of services and the total number of times each service has been availed
                         $query_services = "
-                            SELECT * FROM transactions
+                 
+                                SELECT t.*, ST.*
+
+                            
+                       FROM transactions AS t 
+                       INNER JOIN services_transaction AS ST ON ST.transaction_id = t.id
+   
+
                             WHERE user_id = '$user_id' 
-                            ORDER BY created_at DESC 
+                            ORDER BY Created_at DESC 
                             LIMIT 10
                         "; 
 
@@ -115,9 +123,11 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";
-                                echo "<td>" . htmlspecialchars(date("F/d/Y", strtotime($row['created_at']))) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['total_amount']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['transaction']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['set_schedule'] ? date("F/d/Y", strtotime($row['set_schedule'])) : '') . "</td>";
+                                echo "<td>" . htmlspecialchars($row['total_amount'] ?? '') . "</td>";
+                                echo "<td>" . htmlspecialchars($row['transaction'] ?? '') . "</td>";
+                                echo "<td>" . htmlspecialchars($row['created_at'] ? date("F/d/Y", strtotime($row['created_at'])) : '') . "</td>";
+                                
                                 echo "</tr>";
                             }
                         } else {

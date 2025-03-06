@@ -88,45 +88,54 @@
                         <th>Service Name</th>
                         <th>Category</th>
                         <th>Price</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    // Check if $conn is set
-                    if (isset($conn)) {
-                        $sql = "SELECT id, service_name, category, price FROM motorcycle_services ORDER BY service_name ASC";
-                        $result = $conn->query($sql);
+    <?php
+    if (isset($conn)) {
+        $sql = "SELECT id, service_name, category, price, archive FROM motorcycle_services ORDER BY service_name ASC";
+        $result = $conn->query($sql);
 
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>
-                                        <td>" . htmlspecialchars($row['service_name']) . "</td>
-                                        <td>" . htmlspecialchars($row['category']) . "</td>
-                                        <td>" . htmlspecialchars($row['price']) . "</td>
-                                        <td>
-                                            <button class='btn btn-warning btn-sm edit-btn' 
-                                                data-id='" . $row['id'] . "' 
-                                                data-name='" . htmlspecialchars($row['service_name']) . "' 
-                                                data-category='" . htmlspecialchars($row['category']) . "' 
-                                                data-price='" . htmlspecialchars($row['price']) . "'>
-                                                Edit
-                                            </button>
-                                            <a href='archive-service.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' 
-                                                onclick='return confirm(\"Are you sure you want to archive this service?\")'>
-                                                Archive
-                                            </a>
-                                        </td>
-                                    </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='4'>No services found</td></tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='4'>Database connection error</td></tr>";
-                    }
-                    ?>
-                </tbody>
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $buttonText = ($row['archive'] == 1) ? 'Unarchive' : 'Archive';
+                $buttonClass = ($row['archive'] == 1) ? 'btn-success' : 'btn-danger';
+                $confirmMessage = ($row['archive'] == 1) 
+                    ? "Are you sure you want to unarchive this service?" 
+                    : "Are you sure you want to archive this service?";
+
+                echo "<tr>
+                        <td>" . htmlspecialchars($row['service_name']) . "</td>
+                        <td>" . htmlspecialchars($row['category']) . "</td>
+                        <td>" . htmlspecialchars($row['price']) . "</td>
+                        <td>" . ($row['archive'] == 1 ? 'Archived' : 'Active') . "</td>
+                        <td>
+                            <button class='btn btn-warning btn-sm edit-btn' 
+                                data-id='" . $row['id'] . "' 
+                                data-name='" . htmlspecialchars($row['service_name']) . "' 
+                                data-category='" . htmlspecialchars($row['category']) . "' 
+                                data-price='" . htmlspecialchars($row['price']) . "'>
+                                Edit
+                            </button>
+                            <a href='process/archive-services.php?id=" . $row['id'] . "&archive=" . $row['archive'] . "' 
+                                class='btn $buttonClass btn-sm' 
+                                onclick='return confirm(\"$confirmMessage\")'>
+                                $buttonText
+                            </a>
+                        </td>
+                    </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='5'>No services found</td></tr>";
+        }
+    } else {
+        echo "<tr><td colspan='5'>Database connection error</td></tr>";
+    }
+    ?>
+</tbody>
+
             </table>
         </div>
     </div>

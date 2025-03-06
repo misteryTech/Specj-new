@@ -1,0 +1,11 @@
+User list search bar mag auto filter if mag search og name
+
+Ang sa user kay bisan e archive nimo ma log in japon tas ang account ,sa user list 8 japon bisag mag archive na og user
+
+Bug sa list of products kay if mag add to cart ka tas e remove nimo iyang price is mag bilin japon bisag ge remove nimo ang add to cart tapos dili naka maka add to cart after pag remove and then isa lg sad akong ma cart
+
+Guba ang archive if e archive nimo ang services
+
+Sa Archive Products bisan e archive nimo makita japon sya home page ga show japon sya bisan ge archive na
+
+Sa transaction is dili sya sunod sunod like if account nga Isa sa customer mag pa service possible ma butang sya sa second lane or third dapat pag mag pa service ang customer iyang name dayun ma butang sa list sa transaction

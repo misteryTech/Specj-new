@@ -84,7 +84,7 @@
                         include("process/connection.php");
 
                         // Fetch registered services
-                        $sql = "SELECT id, service_name FROM motorcycle_services";
+                        $sql = "SELECT id, service_name FROM motorcycle_services WHERE archive='0'";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {

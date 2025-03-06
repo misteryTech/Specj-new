@@ -1,12 +1,12 @@
 <?php
-include("../layout/header.php");
+    include("../layout/header.php");
 ?>
 
 <body>
 
   <?php
-  include("../layout/top-nav.php");
-  include("side-bar.php");
+    include("../layout/top-nav.php");
+    include("side-bar.php");
   ?>
 
   <!-- ======= Sidebar ======= -->
@@ -14,11 +14,10 @@ include("../layout/header.php");
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>User</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">Restore</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -33,7 +32,7 @@ include("../layout/header.php");
             <!-- Recent Sales -->
             <?php
             // Fetch data from the users table
-            $query = "SELECT * FROM users";
+            $query = "SELECT id, firstname, lastname, email, username FROM users WHERE archive = '1'";
             $result = $conn->query($query);
             ?>
 
@@ -55,13 +54,12 @@ include("../layout/header.php");
                 <div class="card-body">
                   <h5 class="card-title">User List <span>| All Users</span></h5>
 
-                  <table class="table table-borderless datatables" id="userlist">
+                  <table class="table table-borderless datatable">
                     <thead>
                       <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Username</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -70,16 +68,20 @@ include("../layout/header.php");
                       if ($result->num_rows > 0) {
                         // Loop through the records and display them
                         while ($row = $result->fetch_assoc()) {
-                            $archivestatus = ($row['archive'] == 0) ? 'Unarchive' : 'Archive';
                           echo "<tr>
                                 <td>{$row['firstname']} {$row['lastname']}</td>
                                 <td>{$row['username']}</td>
                                 <td>{$row['email']}</td>
-                                <td>{$archivestatus}</td>
+
+                                
+                        <td>
+                            <a href='process/restore-user.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to Restore this User?\")'>Restore</a>
+                        </td>
+
                               </tr>";
                         }
                       } else {
-                        echo "<tr><td colspan='4'>No users found.</td></tr>";
+                        echo "<tr><td colspan='3'>No users found.</td></tr>";
                       }
                       ?>
                     </tbody>
@@ -111,9 +113,3 @@ include("../layout/header.php");
 
 </body>
 </html>
-
-<script>
-    $(document).ready( function (){
-        $('#userlist').DataTable();
-    });
-</script>

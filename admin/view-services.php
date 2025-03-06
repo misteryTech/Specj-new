@@ -20,8 +20,12 @@ $transactionId = intval($_GET['transaction_id']);
 
 // Fetch transaction details (name, total amount, transaction type)
 $transactionQuery = "
-    SELECT t.firstname, t.lastname, t.total_amount, t.transaction ,t.type_transaction, t.created_at    
-    FROM transactions t 
+    SELECT t.*, ST.*
+
+    FROM transactions AS t 
+    INNER JOIN services_transaction AS ST ON ST.transaction_id = t.id
+   
+
     WHERE t.id = ?
 ";
 $transactionStmt = $conn->prepare($transactionQuery);
@@ -71,7 +75,16 @@ $transactionStmt->close();
                 <p><strong>Transaction Type:</strong> <?php echo htmlspecialchars($transactionDetails['type_transaction']); ?></p>
               </div>
               <div class="col-md-6 mb-2">
-                <p><strong>Date:</strong> <?php echo date("F d, Y", strtotime($transactionDetails['created_at'])); ?></p>
+                <p><strong>Date Request:</strong> <?php echo date("F d, Y", strtotime($transactionDetails['created_at'])); ?></p>
+              </div>
+
+              <div class="col-md-12 mb-2">
+                <p><strong>Date Scheduled:</strong> <?php 
+echo isset($transactionDetails['set_schedule']) && !empty($transactionDetails['set_schedule']) 
+    ? date("F d, Y", strtotime($transactionDetails['set_schedule'])) 
+    : "No schedule set";
+?>
+</p>
               </div>
             </div>
 
@@ -121,16 +134,21 @@ $transactionStmt->close();
                       while ($row = $serviceResult->fetch_assoc()) {
                         ?>
                         <tr>
-                          <td><?php echo htmlspecialchars($row['service_name']); ?></td>
-                          <td><?php echo $row['service_type']; ?></td>
-                          <td><?php echo number_format($row['price'], 2); ?></td>
-                          <td><?php echo htmlspecialchars($row['status']); ?></td>
-                          <td>
-    <button class="btn btn-primary btn-sm" 
-      onclick="openScheduleModal(<?php echo $row['id']; ?>, '<?php echo addslashes($row['service_name']); ?>', '<?php echo addslashes($row['status']); ?>')">
-      Set Schedule
-    </button> || 
+                        <td><?php echo htmlspecialchars($row['service_name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+<td><?php echo $row['service_type'] ?? ''; ?></td>
+<td><?php echo number_format($row['price'] ?? 0, 2); ?></td>
+<td><?php echo htmlspecialchars($row['status'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
 
+                          <td>
+                          <button class="btn btn-primary btn-sm" 
+    onclick="openScheduleModal(
+        <?php echo $row['id']; ?>, 
+        '<?php echo addslashes($row['service_name'] ?? ''); ?>', 
+        '<?php echo addslashes($row['status'] ?? ''); ?>'
+    )">
+    Set Schedule
+</button>
+|| 
     <a href="release-product-page.php?serviceId=<?php echo $row['transaction_id']; ?>" class="btn btn-success btn-sm">Release Product</a>
 </td>
 

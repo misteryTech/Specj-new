@@ -152,6 +152,7 @@ include("side-bar.php");
 include("../layout/footer.php");
 ?>
 
+
 <script>
 // Function to handle service selection
 function selectService(button) {
@@ -232,9 +233,6 @@ function updateTotal() {
     document.getElementById("selectedproduct").value = JSON.stringify(selectedproduct);
 }
 
-
-
-
 // Update cart item count
 function updateCartCount() {
     const cartCount = document.getElementById('cartCount');
@@ -262,9 +260,10 @@ function updateItemTotal(input) {
 // Remove selected service
 document.getElementById('selectedProduct').addEventListener('click', function(e) {
     if (e.target.classList.contains('removeService')) {
-        e.target.parentElement.remove();
+        e.target.closest('li').remove();
         updateTotal();
         updateCartCount();
     }
 });
+
 </script>
