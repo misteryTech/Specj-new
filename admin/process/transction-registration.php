@@ -69,9 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
 
         // Step 3: Insert transaction details
-        $transactionSql = "INSERT INTO transactions (user_id, firstname, lastname, total_amount, created_at, type_transaction, transaction) VALUES (?, ?, ?, ?, NOW(), ?, ?)";
+        $transactionSql = "INSERT INTO transactions (user_id, firstname, lastname, total_amount, created_at, type_transaction, `transaction`, `status`) VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
         $stmt = $conn->prepare($transactionSql);
-        $stmt->bind_param("issdss", $userId, $first_name, $last_name, $totalAmount, $transaction, $product_transaction);
+        $stmt->bind_param("issdsss", $userId, $first_name, $last_name, $totalAmount, $transaction, $product_transaction, $status);
         $stmt->execute();
         $transactionId = $stmt->insert_id;
         $stmt->close();

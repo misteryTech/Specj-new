@@ -138,18 +138,25 @@ echo isset($transactionDetails['set_schedule']) && !empty($transactionDetails['s
 <td><?php echo $row['service_type'] ?? ''; ?></td>
 <td><?php echo number_format($row['price'] ?? 0, 2); ?></td>
 <td><?php echo htmlspecialchars($row['status'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+<td>
+    <?php echo htmlspecialchars($row['status'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+</td>
 
-                          <td>
-                          <button class="btn btn-primary btn-sm" 
-    onclick="openScheduleModal(
-        <?php echo $row['id']; ?>, 
-        '<?php echo addslashes($row['service_name'] ?? ''); ?>', 
-        '<?php echo addslashes($row['status'] ?? ''); ?>'
-    )">
-    Set Schedule
-</button>
-|| 
-    <a href="release-product-page.php?serviceId=<?php echo $row['transaction_id']; ?>" class="btn btn-success btn-sm">Release Product</a>
+<td>
+    <?php if (($row['status'] ?? '') !== 'Scheduled') : ?>
+        <button class="btn btn-primary btn-sm" 
+            onclick="openScheduleModal(
+                <?php echo $row['id']; ?>, 
+                '<?php echo addslashes($row['service_name'] ?? ''); ?>', 
+                '<?php echo addslashes($row['status'] ?? ''); ?>'
+            )">
+            Set Schedule
+        </button>
+    <?php endif; ?>
+
+    <a href="release-product-page.php?serviceId=<?php echo $row['transaction_id']; ?>" class="btn btn-success btn-sm">
+        Release Product
+    </a>
 </td>
 
                         </tr>

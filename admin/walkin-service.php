@@ -35,7 +35,7 @@ include("side-bar.php");
 
   
                             <h6>Customer Information</h6>
-                            <hr>
+                            <hr>    
                      
                         <div class="col-md-6">
                             <label for="first_name" class="form-label">First Name</label>
@@ -61,7 +61,7 @@ include("side-bar.php");
           
               <?php
               // Fetch services from the database
-              $sql = "SELECT id, service_name, category, price FROM motorcycle_services ORDER BY service_name ASC";
+              $sql = "SELECT id, service_name, category, price FROM motorcycle_services WHERE archive = '0' ORDER BY service_name ASC";
               $result = $conn->query($sql);
               ?>
 

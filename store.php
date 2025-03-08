@@ -95,7 +95,7 @@
                         include("process/connection.php");
 
                         // Fetch registered products
-                        $sql = "SELECT parts_name, price, category, image FROM parts_registration";
+                        $sql = "SELECT parts_name, price, category, image FROM parts_registration WHERE archive = '0' ";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {

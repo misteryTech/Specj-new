@@ -246,7 +246,7 @@ function updateItemTotal(input) {
 // Remove selected service
 document.getElementById('selectedProduct').addEventListener('click', function(e) {
     if (e.target.classList.contains('removeService')) {
-        e.target.parentElement.remove();
+        e.target.closest('li').remove();
         updateTotal();
         updateCartCount();
     }
