@@ -108,21 +108,48 @@ if ($result && $row = $result->fetch_assoc()) {
         </li><!-- End Product Nav -->
 
 <!-- Transaction Nav -->
-<li class="nav-item <?= ($current_page == 'transaction-list.php') ? 'active' : '' ?>">
-    <a class="nav-link collapsed" data-bs-target="#transaction-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-clipboard-data"></i><span>Transaction</span>
+<li class="nav-item <?= ($current_page === 'transaction-list.php') ? 'active' : '' ?>">
+    <a class="nav-link collapsed" data-bs-toggle="collapse" href="#transaction-nav">
+        <i class="bi bi-clipboard-data"></i>
+        <span>Transaction</span>
         <i class="bi bi-chevron-down ms-auto"></i>
-        <?php if ($onprocessCount > 0): ?>
-            <span class="badge bg-danger"><?= $onprocessCount ?></span> <!-- Show count badge if greater than 0 -->
-        <?php endif; ?>
+
     </a>
-    <ul id="transaction-nav" class="nav-content collapse <?= ($current_page == 'transaction-list.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
+    <ul id="transaction-nav" class="nav-content collapse <?= ($current_page === 'transaction-list.php' || $current_page === 'scheduled-page.php' || $current_page === 'completed-task.php') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
         <li>
-            <a href="transaction-list.php" class="<?= $current_page == 'transaction-list.php' ? 'active' : '' ?>">
-                <i class="bi bi-circle"></i><span>List of Transactions</span>
+            <a href="transaction-list.php" class="<?= ($current_page === 'transaction-list.php') ? 'active' : '' ?>">
+                <i class="bi bi-circle"></i><span>List of Transactions         <?php if (!empty($onprocessCount)): ?>
+            <span class="badge bg-danger"><?= htmlspecialchars($onprocessCount) ?></span>
+        <?php endif; ?></span>
             </a>
         </li>
+        <li>
+            <a href="scheduled-page.php" class="<?= ($current_page === 'scheduled-page.php') ? 'active' : '' ?>">
+                <i class="bi bi-circle"></i><span>Scheduled Services</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="completed-task.php" class="<?= ($current_page === 'completed-task.php') ? 'active' : '' ?>">
+                <i class="bi bi-circle"></i><span>Completed Task</span>
+            </a>
+        </li>
+
+
+
+
     </ul>
-</li><!-- End Transaction Nav -->
+
+                <!-- Dashboard Nav -->
+                <li class="nav-item <?= ($current_page == 'reports.php') ? 'active' : '' ?>">
+            <a class="nav-link" href="reports.php">
+                <i class="bi bi-graph-up"></i>
+                <span>Reports</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+</li>
+<!-- End Transaction Nav -->
+
     </ul>
 </aside><!-- End Sidebar -->

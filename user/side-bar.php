@@ -1,5 +1,23 @@
 <?php
+
+
+
+
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Query to count the number of transactions with status 'onprocess'
+$query = "SELECT COUNT(*) AS onprocess_count FROM transactions WHERE status = 'onprocess'";
+$result = $conn->query($query);
+
+// Check if the query executed successfully
+if ($result && $row = $result->fetch_assoc()) {
+    $onprocessCount = $row['onprocess_count'];
+} else {
+    $onprocessCount = 0; // In case of an error, set count to 0
+}
+
+
+
 ?>
 
 <aside id="sidebar" class="sidebar">
@@ -12,6 +30,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
+
+
+                <!-- Dashboard Nav -->
+        <li class="nav-item <?= ($current_page == 'transaction-page.php' || $current_page == 'transaction-page.php') ? 'active' : '' ?>">
+            <a class="nav-link" href="transaction.php">
+                <i class="bi bi-tools"></i>
+                <span>Transactions</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
 
                
         <!-- Dashboard Nav -->

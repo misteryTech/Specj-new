@@ -95,6 +95,7 @@
                             <th>Scheduled Date</th>
                             <th>Total Amount</th>
                             <th>Transaction</th>
+                            <th>Status</th>
                             <th>Date Request</th>
                         </tr>
                     </thead>
@@ -127,7 +128,7 @@
                                 echo "<td>" . htmlspecialchars($row['total_amount'] ?? '') . "</td>";
                                 echo "<td>" . htmlspecialchars($row['transaction'] ?? '') . "</td>";
                                 echo "<td>" . htmlspecialchars($row['created_at'] ? date("F/d/Y", strtotime($row['created_at'])) : '') . "</td>";
-                                
+                                echo "<td>" . htmlspecialchars($row['status'] ?? '') . "</td>";
                                 echo "</tr>";
                             }
                         } else {

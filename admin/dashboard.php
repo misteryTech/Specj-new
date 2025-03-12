@@ -95,18 +95,41 @@
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card expired-item">
 
-                
-                <div class="card-body">
-                <h5 class="card-title">Expired Item</h5>
+              <div class="card-body">
+  <h5 class="card-title">Expired Items</h5>
 
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-wrench"></i>
-                    </div>
-                    <div class="ps-3">
-                   
-                   
-                    </div>
+  <div class="d-flex align-items-center">
+    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+      <i class="bi bi-exclamation-triangle"></i>
+    </div>
+    <div class="ps-3">
+      <?php
+
+
+      // Get current date
+      $currentDate = date('Y-m-d');
+
+      // Query to count expired products
+      $query = "SELECT COUNT(*) AS expired_count FROM parts_registration WHERE date_expired < ?";
+      
+      if ($stmt = $conn->prepare($query)) {
+          $stmt->bind_param("s", $currentDate);
+          $stmt->execute();
+          $stmt->bind_result($expiredCount);
+          $stmt->fetch();
+          $stmt->close();
+      } else {
+          $expiredCount = 0; // In case of query failure
+      }
+      ?>
+
+      <h6><?php echo $expiredCount; ?> Expired</h6>
+      <span class="text-danger small pt-1 fw-bold">Check Inventory</span>
+    </div>
+
+
+
+
                   </div>
                 </div>
 
@@ -141,10 +164,96 @@
                   </div>
                 </div>
 
+
+
+
+                
+
               </div>
             </div><!-- End Revenue Card -->
 
    
+
+            
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card out-stock">
+
+                
+                <div class="card-body">
+                <h5 class="card-title">On Process</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="spinner-border" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+                    </div>
+                    <div class="ps-3">
+            
+                  <h6>
+                  <?php
+                      // Fetch total count of parts that are out of stock or below reorder point
+                      $sql_transactions_process = "SELECT COUNT(*) AS trans_status_process FROM transactions WHERE status='onprocess'"; 
+                      $result_transactions_process = $conn->query($sql_transactions_process);
+                      $row_transactions_process = $result_transactions_process->fetch_assoc();
+                      echo $row_transactions_process['trans_status_process'] ?? 0; // Display 0 if no data
+                      ?>
+                  </h6>
+
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+                
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+
+
+
+
+            
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                
+                <div class="card-body">
+                <h5 class="card-title">Completed Task</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="ps-3">
+                    <h6>
+                      <?php
+                      // Fetch total count of parts that are out of stock or below reorder point
+                      $sql_transactions = "SELECT COUNT(*) AS trans_status FROM transactions WHERE status='Completed'"; 
+                      $result_transactions = $conn->query($sql_transactions);
+                      $row_transactions = $result_transactions->fetch_assoc();
+                      echo $row_transactions['trans_status'] ?? 0; // Display 0 if no data
+                      ?>
+                  </h6>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+                
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+
+
 
 
             <!-- <div class="col-xxl-4 col-xl-12">
@@ -183,14 +292,7 @@
 
             </div> -->
 
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Scheduled Services Calendar</h5>
-                        <div id='calendar'></div>
-                    </div>
-                </div>
-           </div>
+           
 
           </div>
         </div><!-- End Left side columns -->
@@ -257,6 +359,17 @@
 
    
         </div><!-- End Right side columns -->
+
+
+        <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Scheduled Services Calendar</h5>
+                        <div id='calendar'></div>
+                    </div>
+                </div>
+           </div>
+
 
       </div>
     </section>

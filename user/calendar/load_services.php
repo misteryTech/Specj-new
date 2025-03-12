@@ -23,7 +23,7 @@ $query = "
 
     FROM transactions AS T
     INNER JOIN services_transaction AS ST ON ST.transaction_id = T.id
-    WHERE T.user_id = '$user_id' AND T.transaction = 'Services'
+    WHERE T.user_id = '$user_id' AND T.transaction = 'Services' AND T.status = 'onprocess'
 "; // Adjust table and column names as per your schema
 
 $result = $conn->query($query);
