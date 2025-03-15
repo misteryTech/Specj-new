@@ -32,15 +32,7 @@ if ($result && $row = $result->fetch_assoc()) {
         </li><!-- End Dashboard Nav -->
 
 
-                <!-- Dashboard Nav -->
-        <li class="nav-item <?= ($current_page == 'transaction-page.php' || $current_page == 'transaction-page.php') ? 'active' : '' ?>">
-            <a class="nav-link" href="transaction.php">
-                <i class="bi bi-tools"></i>
-                <span>Transactions</span>
-            </a>
-        </li><!-- End Dashboard Nav -->
-
-
+   
                
         <!-- Dashboard Nav -->
         <li class="nav-item <?= $current_page == 'services-list.php' ? 'active' : '' ?>">
@@ -67,6 +59,14 @@ if ($result && $row = $result->fetch_assoc()) {
         </li><!-- End Dashboard Nav -->
 
 
+
+             <!-- Dashboard Nav -->
+             <li class="nav-item <?= ($current_page == 'transaction-page.php' || $current_page == 'transaction-page.php') ? 'active' : '' ?>">
+            <a class="nav-link" href="transaction.php">
+                <i class="bi bi-tools"></i>
+                <span>Transactions</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
 
 
     </ul>

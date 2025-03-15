@@ -128,10 +128,19 @@ $transactionStmt->close();
                           <td><?php echo $row['quantity_stock']; ?></td>
                           <td><?php echo $row['status']; ?></td>
                           <td>
+                            
+                          
+                          <?php if ($transactionDetails['type_transaction'] !== 'Walkin') : ?>
+
                             <button class="btn btn-success btn-sm" 
                               onclick="openReleaseModal(<?php echo $row['id']; ?>, '<?php echo addslashes($row['parts_name']); ?>', <?php echo $row['quantity']; ?>)">
                               Release Item
                             </button>
+
+                            <?php endif; ?>
+
+
+
                           </td>
                         </tr>
                         <?php

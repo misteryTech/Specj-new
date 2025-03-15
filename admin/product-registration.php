@@ -63,53 +63,51 @@
                                     <input type="date" class="form-control" id="date_expired" name="date_expired" required> 
                                 </div>
 
-                                <div class="col-md-4">
-                                    <label for="category" class="form-label">Category</label>
+                                <div class="col-md-6">
+                                    <label for="category" class="form-label">Category</label> 
+                                    <a href="category.php" class="btn btn-primary mb-3">Add Category</a>
                                     <select class="form-control" id="category" name="category">
-                                        <option value="">Select a category</option>
-                                        <option value="engine-components">Engine Components</option>
-                                        <option value="exhaust-system">Exhaust System</option>
-                                        <option value="electrical-and-lighting">Electrical and Lighting</option>
-                                        <option value="fuel-system">Fuel System</option>
-                                        <option value="braking-system">Braking System</option>
-                                        <option value="transmission-and-drivetrain">Transmission and Drivetrain</option>
-                                        <option value="suspension-and-steering">Suspension and Steering</option>
-                                        <option value="body-and-frame">Body and Frame</option>
-                                        <option value="wheels-and-tires">Wheels and Tires</option>
-                                        <option value="controls-and-levers">Controls and Levers</option>
-                                        <option value="cooling-system">Cooling System</option>
-                                        <option value="accessories">Accessories</option>
-                                        <option value="protective-gear">Protective Gear</option>
-                                        <option value="maintenance-tools">Maintenance Tools</option>
-                                    </select>
+    <option value="">Select Category</option>
+    <?php
+    
+    // Fetch categories from the database
+    $sql = "SELECT id, category_name FROM category";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<option value="' . $row['category_name'] . '">' . $row['category_name'] . '</option>';
+        }
+    } else {
+        echo '<option value="">No categories found</option>';
+    }
+
+    ?>
+</select>
+
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="manufacturer" class="form-label">Brand Name</label>
+                                    <a href="branding.php" class="btn btn-primary mb-3">Add Brand</a>
                                     <select class="form-control" id="manufacturer" name="manufacturer">
-                                        <option value="">Select a Brand</option>
-                                        <option value="Rusi">Rusi</option>
-                                        <option value="bosch">Bosch</option>
-                                        <option value="brembo">Brembo</option>
-                                        <option value="did">DID</option>
-                                        <option value="dunlop">Dunlop</option>
-                                        <option value="ebc-brakes">EBC Brakes</option>
-                                        <option value="fmf-racing">FMF Racing</option>
-                                        <option value="hinson">Hinson</option>
-                                        <option value="kn">K&N</option>
-                                        <option value="michelin">Michelin</option>
-                                        <option value="ngk">NGK</option>
-                                        <option value="ohlins">Ohlins</option>
-                                        <option value="pirelli">Pirelli</option>
-                                        <option value="renthal">Renthal</option>
-                                        <option value="rk-excel">RK Excel</option>
-                                        <option value="scorpion-exhausts">Scorpion Exhausts</option>
-                                        <option value="shinko">Shinko</option>
-                                        <option value="showa">Showa</option>
-                                        <option value="vance-hines">Vance & Hines</option>
-                                        <option value="wiseco">Wiseco</option>
-                                        <option value="yoshimura">Yoshimura</option>
-                                    </select>
+                                    <option value="">Select Category</option>
+    <?php
+    
+    // Fetch categories from the database
+    $sql = "SELECT id, brand_name FROM branding";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<option value="' . $row['brand_name'] . '">' . $row['brand_name'] . '</option>';
+        }
+    } else {
+        echo '<option value="">No Brand found</option>';
+    }
+
+    ?>
+</select>
                                 </div>
 
                                 <div class="col-md-4">
