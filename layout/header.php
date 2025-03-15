@@ -9,7 +9,7 @@ include("../process/connection.php");
 // Check if the user is logged in by verifying the session
 if (!isset($_SESSION['user_id'])) {
     // If not logged in, redirect to login page
-    header("Location: ../login.php");
+    header("Location: ../customer_login.php");
     exit(); // Stop further execution
 }
 $user_id = $_SESSION['user_id'];
