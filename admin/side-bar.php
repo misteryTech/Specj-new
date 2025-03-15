@@ -104,6 +104,14 @@ if ($result && $row = $result->fetch_assoc()) {
                         <i class="bi bi-circle"></i><span>Archive Products</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="expired-product.php" class="<?= $current_page == 'expired-product.php' ? 'active' : '' ?>">
+                        <i class="bi bi-circle"></i><span>Expired Items</span>
+                    </a>
+                </li>
+
+
             </ul>
         </li><!-- End Product Nav -->
 

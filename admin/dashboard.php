@@ -95,9 +95,10 @@
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card expired-item">
 
-              <div class="card-body">
+       <div class="card-body">
+  
   <h5 class="card-title">Expired Items</h5>
-
+  <a href="expired-product.php"> 
   <div class="d-flex align-items-center">
     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
       <i class="bi bi-exclamation-triangle"></i>
@@ -124,6 +125,8 @@
       ?>
 
       <h6><?php echo $expiredCount; ?> Expired</h6>
+      </a>
+
       <span class="text-danger small pt-1 fw-bold">Check Inventory</span>
     </div>
 

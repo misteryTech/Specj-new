@@ -139,8 +139,6 @@ $transactionStmt->close();
 
                             <?php endif; ?>
 
-
-
                           </td>
                         </tr>
                         <?php
