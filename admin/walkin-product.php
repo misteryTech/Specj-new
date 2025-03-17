@@ -31,7 +31,7 @@ include("side-bar.php");
 <div class="row g-3">
     <?php
     // Fetch categories and their parts with stock info and images from the database
-    $categorySql = "SELECT DISTINCT category FROM parts_registration ORDER BY category ASC";
+    $categorySql = "SELECT DISTINCT category FROM parts_registration WHERE archive='0' ORDER BY category ASC";
     $categories = $conn->query($categorySql);
     ?>
 

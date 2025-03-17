@@ -44,7 +44,7 @@
     </thead>
     <tbody>
         <?php
-        // Fetch services from the database (including the ID)
+        // Fetch services from the database (in cluding the ID)
         $sql = "SELECT * FROM parts_registration WHERE archive = '0' ORDER BY parts_name ASC";
         $result = $conn->query($sql);
 
