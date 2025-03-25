@@ -98,7 +98,7 @@
        <div class="card-body">
   
   <h5 class="card-title">Expired Items</h5>
-  <a href="expired-product.php"> 
+  <a href="expired-list.php"> 
   <div class="d-flex align-items-center">
     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
       <i class="bi bi-exclamation-triangle"></i>

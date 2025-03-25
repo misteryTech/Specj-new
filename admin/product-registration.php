@@ -32,17 +32,38 @@
 
       <!-- Multi Columns Form -->
       <form class="row g-3" action="process/parts-registration.php" method="POST" enctype="multipart/form-data">
-                                <div class="col-md-4">
-                                <img id="image_preview" src=""  style="max-width: 100%; margin-bottom: 15px;">
+                             
+                                <div class="col-md-9">
+                                <img id="image_preview" src="images/default-placeholder.png" 
+     style="width: 200px; height: 200px; object-fit: cover; border: 2px solid #ddd; 
+            border-radius: 10px; padding: 5px; display: block; ">
                                     <label for="parts_image" class="form-label">Product Picture (Optional)</label>
                                     <input type="file" class="form-control" id="parts_image" name="parts_image" onchange="previewImage(event)">
-
                                 </div>
 
-                                <div class="col-md-12">
+
+
+
+                                 <div class="col-md-6">
                                     <label for="parts_name" class="form-label">Parts Name</label>
-                                    <input type="text" class="form-control" id="parts_name" name="parts_name">
+                                    <input type="text" class="form-control" placeholder="Enter Parts Name" list="parts_list" id="parts_name" name="parts_name">
+                                    <datalist id="parts_list"></datalist>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <label for="slug" class="form-label">Slug</label>
+                                    <input type="text" class="form-control" id="slug" name="slug" readonly>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="batch_number" class="form-label">Batch Number</label>
+                                    <input type="text" class="form-control" id="batch_number" name="batch_number" readonly>
+                                </div>
+
+
+                                
+
+
 
                                 <div class="col-md-4">
                                     <label for="services_type" class="form-label">Services Type</label>
@@ -230,7 +251,69 @@ if ($result->num_rows > 0) {
 <?php
     include("../layout/footer.php");
 ?>
+
  <script>
+
+$(document).ready(function() {
+    // Fetch registered parts for autocomplete
+    $.ajax({
+        url: "verification/fetch_parts.php",
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            if (response.length > 0) {
+                let dataList = $("#parts_list");
+                dataList.empty(); // Clear previous options
+                
+                response.forEach(function(item) {
+                    dataList.append(`<option value="${item}">`);
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+
+    // When a part is selected, fetch slug, batch number, and image
+    $("#parts_name").on("input", function() {
+        let partName = $(this).val().trim();
+
+        if (partName.length < 2) return;
+
+        $.ajax({
+            url: "verification/fetch_part_details.php",
+            type: "GET",
+            data: { parts_name: partName },
+            dataType: "json",
+            success: function(response) {
+                if (response.error) {
+                    console.error(response.error);
+                } else {
+                    $("#slug").val(response.slug);
+                    $("#batch_number").val(response.batch_number);
+                    $("#image_preview").attr("src", response.image);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    });
+});
+
+// Preview uploaded image
+function previewImage(event) {
+    let reader = new FileReader();
+    reader.onload = function() {
+        let output = document.getElementById('image_preview');
+        output.src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+
+
         function previewImage(event) {
             var reader = new FileReader();
             reader.onload = function(){
@@ -243,10 +326,6 @@ if ($result->num_rows > 0) {
         function resetImagePreview() {
             document.getElementById('image_preview').src = "";
         }
-
-        $(document).ready(function() {
-            $('#parts_datatable').DataTable();
-        });
 
 
     </script>

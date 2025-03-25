@@ -30,11 +30,11 @@ if ($result && $row = $result->fetch_assoc()) {
         </li><!-- End Dashboard Nav -->
 
         <!-- User Nav -->
-        <li class="nav-item <?= in_array($current_page, ['user-registration.php', 'user-list.php', 'user-archived.php']) ? 'active' : '' ?>">
+        <li class="nav-item <?= in_array($current_page, ['user-information.php', 'user-list.php', 'user-archived.php']) ? 'active' : '' ?>">
             <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person"></i><span>User</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="user-nav" class="nav-content collapse <?= in_array($current_page, ['user-registration.php', 'user-list.php', 'user-archived.php', 'user-restore.php']) ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
+            <ul id="user-nav" class="nav-content collapse <?= in_array($current_page, ['user-information.php', 'user-list.php', 'user-archived.php', 'user-restore.php']) ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="user-list.php" class="<?= $current_page == 'user-list.php' ? 'active' : '' ?>">
                         <i class="bi bi-circle"></i><span>User List</span>
@@ -84,13 +84,13 @@ if ($result && $row = $result->fetch_assoc()) {
         </li><!-- End Services Nav -->
 
         <!-- Product Nav -->
-        <li class="nav-item <?= in_array($current_page, ['product-registration.php', 'product-list.php', 'archive-product.php']) ? 'active' : '' ?>">
+        <li class="nav-item <?= in_array($current_page, ['product_information.php', 'product-list.php', 'archive-product.php']) ? 'active' : '' ?>">
             <a class="nav-link collapsed" data-bs-target="#product-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-box"></i><span>Product</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="product-nav" class="nav-content collapse <?= in_array($current_page, ['product-registration.php', 'product-list.php', 'archive-product.php']) ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
+            <ul id="product-nav" class="nav-content collapse <?= in_array($current_page, ['product_information.php', 'product-list.php', 'archive-product.php']) ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="product-registration.php" class="<?= $current_page == 'product-registration.php' ? 'active' : '' ?>">
+                    <a href="product_information.php" class="<?= $current_page == 'product_information.php' ? 'active' : '' ?>">
                         <i class="bi bi-circle"></i><span>Register Product</span>
                     </a>
                 </li>
