@@ -111,7 +111,7 @@
       $currentDate = date('Y-m-d');
 
       // Query to count expired products
-      $query = "SELECT COUNT(*) AS expired_count FROM parts_registration WHERE date_expired < ?";
+      $query = "SELECT COUNT(*) AS expired_count FROM stocks WHERE date_expired < ?";
       
       if ($stmt = $conn->prepare($query)) {
           $stmt->bind_param("s", $currentDate);
