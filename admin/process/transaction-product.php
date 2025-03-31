@@ -1,102 +1,78 @@
 <?php
 include("../connection.php");
-session_start();
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
-    exit();
-}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $first_name = $_POST['first_name'] ?? '';
+    $last_name = $_POST['last_name'] ?? '';
+    $mobile = $_POST['mobile'] ?? '';
+    $purchase_date = $_POST['schedule'] ?? '';
+    $total_price = $_POST['total_price'] ?? '0'; 
+    $transaction_type = $_POST['product_transaction'] ?? '';
 
-$transaction = "Walkin";
-$status = "Released";
+    // Decode the selected products JSON
+    $selectedProducts = json_decode($_POST['selectedproduct'], true);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $selectedproduct = json_decode($_POST['selectedproduct'], true);
-    $product_transaction = $_POST['product_transaction'];
-    $first_name = trim($_POST['first_name']);
-    $last_name = trim($_POST['last_name']);
-    $email = trim($_POST['email']);
-    $schedule = $_POST['schedule'];
-    $status = "Scheduled";
-
-    // Validation: Check if no products are selected
-    if (empty($selectedproduct)) {
-        echo "<script>alert('No product selected. Please select at least one product to proceed.');</script>";
-        echo "<script>window.location.href='../product-list.php';</script>";
+    if (!$selectedProducts || count($selectedProducts) === 0) {
+        echo "<script>alert('Error: No products selected.'); window.history.back();</script>";
         exit();
     }
 
-    // Begin transaction
-    $conn->begin_transaction();
-
     try {
-        $totalAmount = 0;
+        $conn->autocommit(false); // Begin Transaction
 
-        // Calculate total amount, validate products, and update stock
-        foreach ($selectedproduct as $product) {
-            $productId = $product['productId'];
-            $quantity = $product['quantity'];
-
-            // Get product details
-            $productQuery = "SELECT price, quantity_stock FROM parts_registration WHERE id = ?";
-            $stmt = $conn->prepare($productQuery);
-            $stmt->bind_param("i", $productId);
-            $stmt->execute();
-            $stmt->bind_result($price, $quantity_stock);
-
-            if (!$stmt->fetch()) {
-                throw new Exception("Invalid product ID: $productId");
-            }
-            $stmt->close();
-
-            // Check if enough stock is available
-            if ($quantity_stock < $quantity) {
-                throw new Exception("Insufficient stock for product ID: $productId");
-            }
-
-            // Calculate total amount
-            $totalAmount += $price * $quantity;
-
-            // Update stock
-            $updateStockQuery = "UPDATE parts_registration SET quantity_stock = quantity_stock - ? WHERE id = ?";
-            $stmt = $conn->prepare($updateStockQuery);
-            $stmt->bind_param("ii", $quantity, $productId);
-            $stmt->execute();
-            $stmt->close();
-        }
-
-        // Insert transaction details
-        $transactionQuery = "INSERT INTO transactions (firstname, lastname, total_amount, created_at, type_transaction, `transaction`) 
-                             VALUES (?, ?, ?, NOW(), ?, ?)";
-        $stmt = $conn->prepare($transactionQuery);
-        $stmt->bind_param("ssdss", $first_name, $last_name, $totalAmount, $transaction, $product_transaction);
+        // Insert into transactions table
+        $stmt = $conn->prepare("INSERT INTO transactions (firstname, lastname, mobileno, date_completed, total_amount, type_transaction) 
+                                VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssds", $first_name, $last_name, $mobile, $purchase_date, $total_price, $transaction_type);
         $stmt->execute();
-        $transactionId = $stmt->insert_id;
-        $stmt->close();
+        $transaction_id = $conn->insert_id; // Get last inserted ID
 
-        // Insert each selected product into `product_transaction`
-        foreach ($selectedproduct as $product) {
-            $productId = $product['productId'];
-            $quantity = $product['quantity'];
+        // Insert transaction items
+        $stmt_product = $conn->prepare("INSERT INTO transaction_items (transaction_id, product_id, batch_group, quantity, price, subtotal) 
+                                        VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt_update_stock = $conn->prepare("UPDATE stocks SET stock = stock - ? WHERE product_id = ? AND batch_group = ?");
 
-            $detailQuery = "INSERT INTO product_transaction (transaction_id, product_id, quantity, `status`) VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($detailQuery);
-            $stmt->bind_param("iiis", $transactionId, $productId, $quantity, $status);
-            $stmt->execute();
-            $stmt->close();
+        foreach ($selectedProducts as $product) {
+            if (!isset($product['id']) || empty($product['id'])) {
+                throw new Exception("Error: Product ID is missing.");
+            }
+
+            foreach ($product['batches'] as $batch) {
+                // Validate stock before deducting
+                $stockCheckSql = "SELECT stock FROM stocks WHERE product_id = ? AND batch_group = ?";
+                $stmt_check_stock = $conn->prepare($stockCheckSql);
+                $stmt_check_stock->bind_param("ss", $product['id'], $batch['batch_group']);
+                $stmt_check_stock->execute();
+                $result = $stmt_check_stock->get_result();
+
+                if ($result->num_rows === 0) {
+                    throw new Exception("Error: Stock not found for product ID " . $product['id']);
+                }
+
+                $row = $result->fetch_assoc();
+                if ($row['stock'] < $batch['quantity']) {
+                    throw new Exception("Error: Insufficient stock for product ID " . $product['id']);
+                }
+
+                // Insert into transaction_items table
+                $stmt_product->bind_param("issidd", $transaction_id, $product['id'], $batch['batch_group'], $batch['quantity'], $batch['price'], $batch['subtotal']);
+                $stmt_product->execute();
+
+                // Update stock table
+                $stmt_update_stock->bind_param("iss", $batch['quantity'], $product['id'], $batch['batch_group']);
+                $stmt_update_stock->execute();
+            }
         }
 
-        // Commit the transaction
-        $conn->commit();
+        $conn->commit(); // Commit transaction
 
-        echo "<script>alert('Transaction Successful.');</script>";
-        echo "<script>window.location.href='../walkin-product.php';</script>";
+        echo "<script>
+                alert('Transaction successful! Stocks have been released.');
+                window.location.href = '../walkin-product1.php';
+              </script>";
     } catch (Exception $e) {
-        // Rollback the transaction on failure
-        $conn->rollback();
-        echo "<script>alert('Transaction failed: " . addslashes($e->getMessage()) . "');</script>";
-        echo "<script>window.location.href='../walkin-product.php';</script>";
+        $conn->rollback(); // Rollback transaction on error
+        echo "<script>alert('Error: " . $e->getMessage() . "'); window.history.back();</script>";
     }
 }
 ?>

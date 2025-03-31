@@ -1,0 +1,75 @@
+MISSING PRODUCT ID OR UNIT: Array
+(
+    [id] => BATCH-250319-C6C
+    [subtotal] => 100
+    [quantities] => Array
+        (
+            [BATCH-250319-C6C-Kilo-undefined] => 1
+        )
+
+    [stocks] => Array
+        (
+            [Kilo] => Array
+                (
+                    [undefined] => Array
+                        (
+                            [batch] => undefined
+                            [price] => 100
+                        )
+
+                )
+
+        )
+
+)
+
+MISSING PRODUCT ID OR UNIT: Array
+(
+    [id] => BATCH-250319-C6C
+    [subtotal] => 100
+    [quantities] => Array
+        (
+            [BATCH-250319-C6C-Kilo-undefined] => 1
+        )
+
+    [stocks] => Array
+        (
+            [Kilo] => Array
+                (
+                    [undefined] => Array
+                        (
+                            [batch] => undefined
+                            [price] => 100
+                        )
+
+                )
+
+        )
+
+)
+
+BATCH NOT FOUND: Array
+(
+    [id] => BATCH-250319-C6C
+    [subtotal] => 100
+    [quantities] => Array
+        (
+            [BATCH-250319-C6C-null-null] => 1
+        )
+
+    [stocks] => Array
+        (
+            [null] => Array
+                (
+                    [null] => Array
+                        (
+                            [batch] => 
+                            [price] => 100
+                        )
+
+                )
+
+        )
+
+)
+

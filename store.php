@@ -95,7 +95,7 @@
                         include("process/connection.php");
 
                         // Fetch registered products
-                        $sql = "SELECT parts_name, price, category, image FROM parts_registration WHERE archive = '0' ";
+                        $sql = "SELECT parts_name, category, image FROM parts_registrations WHERE archive = 'No' ";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -106,7 +106,7 @@
                                 echo '<div class="card-body">';
                                 echo '<h5 class="card-title">' . htmlspecialchars($row['parts_name']) . '</h5>';
                                 echo '<p class="card-text">Category: ' . htmlspecialchars($row['category']) . '</p>';
-                                echo '<p class="card-text">Price: ₱ ' . htmlspecialchars($row['price']) . '</p>';
+                      
                                 echo '</div>';
                                 echo '</div>';
                                 echo '</div>';
