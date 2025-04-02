@@ -24,7 +24,7 @@
 
 <section class="section">
   <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-12">
 
       <div class="card">
         <div class="card-body">
@@ -35,7 +35,7 @@
       <!-- Multi Columns Form -->
                               <form class="row g-3" action="process/parts_registration.php" method="POST" enctype="multipart/form-data">
                              
-                              <div class="col-md-6">
+                              <div class="col-md-12">
     <label for="parts_name" class="form-label">Parts Name</label>
     <input type="text" class="form-control" placeholder="Enter Parts Name" list="parts_list" id="parts_name" name="parts_name">
     <datalist id="parts_list"></datalist>
@@ -145,70 +145,6 @@
     </div>
 
 
-        <!-- Right side columns -->
-        <div class="col-lg-4">
-            <?php
-// Function to format the date into a human-readable form
-function get_time_label($timestamp) {
-    // Format the timestamp as a date (e.g., 'Y-m-d H:i:s')
-    return date('Y-m-d H:i:s', strtotime($timestamp));
-}
-
-// Fetch recent product logs (limit to 5 most recent for example)
-$sql = "SELECT parts_name, parts_number, quantity_stock, status, action, date_inserted FROM product_logs ORDER BY date_inserted DESC LIMIT 5";
-$result = $conn->query($sql);
-
-$activity_items = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $activity_items[] = $row;
-    }
-}
-            ?>
-  <div class="card">
-
-
-    <div class="card-body">
-        <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-
-        <div class="activity">
-            <?php
-            if (!empty($activity_items)) {
-                foreach ($activity_items as $activity) {
-                    // Get time difference from now
-                    $formatted_date = get_time_label($activity['date_inserted']); // A function to format date
-
-                    // Get badge color based on the action type
-                    $badge_color = ($activity['action'] === 'registration') ? 'success' : 'info';
-                    ?>
-                    <div class="activity-item d-flex">
-                        <div class="activite-label"><?= $formatted_date ?></div>
-                        <i class='bi bi-circle-fill activity-badge text-<?= $badge_color ?> align-self-start'></i>
-                        <div class="activity-content">
-                            <?= $activity['action'] === 'registration' ? 'Product <strong>' . $activity['parts_name'] . '</strong> registered with stock: ' . $activity['quantity_stock'] : 'Product <strong>' . $activity['parts_name'] . '</strong> updated with stock: ' . $activity['quantity_stock'] ?>
-                        </div>
-                    </div><!-- End activity item-->
-                    <?php
-                }
-            } else {
-                echo "<div class='activity-item d-flex'><div class='activite-label'>No recent activity</div></div>";
-            }
-            ?>
-        </div>
-
-    </div>
-</div><!-- End Recent Activity -->
-
-
-     
-        </div><!-- End Right side columns -->
-
-
-
-  </div>
-</section>
-
-</main><!-- End #main -->
 
 <?php
     include("../layout/footer.php");

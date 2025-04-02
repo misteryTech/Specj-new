@@ -8,6 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $purchase_date = $_POST['schedule'] ?? '';
     $total_price = $_POST['total_price'] ?? '0'; 
     $transaction_type = $_POST['product_transaction'] ?? '';
+    $transaction_types = "Product"?? '';
+    $status = "Served"?? '';
 
     // Decode the selected products JSON
     $selectedProducts = json_decode($_POST['selectedproduct'], true);
@@ -21,9 +23,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->autocommit(false); // Begin Transaction
 
         // Insert into transactions table
-        $stmt = $conn->prepare("INSERT INTO transactions (firstname, lastname, mobileno, date_completed, total_amount, type_transaction) 
-                                VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssds", $first_name, $last_name, $mobile, $purchase_date, $total_price, $transaction_type);
+        $stmt = $conn->prepare("INSERT INTO transactions (firstname, lastname, mobileno, date_completed, total_amount, type_transaction, `status`) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssdss", $first_name, $last_name, $mobile, $purchase_date, $total_price, $transaction_types, $status);
         $stmt->execute();
         $transaction_id = $conn->insert_id; // Get last inserted ID
 

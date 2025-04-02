@@ -36,8 +36,6 @@
         <tr>
             <th>Parts Name</th>
             <th>Category</th>
-            <th>Price</th>
-            <th>Stock</th>
            
             <th>Action</th>
         </tr>
@@ -45,7 +43,7 @@
     <tbody>
         <?php
         // Fetch services from the database (including the ID)
-        $sql = "SELECT * FROM parts_registration WHERE archive= '1' ORDER BY parts_name ASC";
+        $sql = "SELECT * FROM parts_registrations WHERE archive= 'Yes' ORDER BY parts_name ASC";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -53,8 +51,7 @@
                 echo "<tr>
                         <td>" . $row['parts_name'] . "</td>
                         <td>" . $row['category'] . "</td>
-                        <td>" . $row['price'] . "</td>
-                        <td>" . $row['quantity_stock'] . "</td>
+                 
                     
                         <td>
 
@@ -82,41 +79,3 @@
 <?php
     include("../layout/footer.php");
 ?>
- <script>
-   document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".edit-btn").forEach(button => {
-      button.addEventListener("click", function () {
-        document.getElementById("part_id").value = this.dataset.id;
-        document.getElementById("edit_name").value = this.dataset.name;
-        document.getElementById("edit_parts_number").value = this.dataset.parts_number;
-        document.getElementById("edit_date_expired").value = this.dataset.date_expired;
-        document.getElementById("edit_category").value = this.dataset.category;
-        document.getElementById("edit_manufacturer").value = this.dataset.manufacturer;
-        document.getElementById("edit_reorder_point").value = this.dataset.reorder_point;
-        document.getElementById("edit_quantity_stock").value = this.dataset.quantity_stock;
-        document.getElementById("edit_price").value = this.dataset.price;
-        document.getElementById("edit_condition").value = this.dataset.condition;
-
-        let editModal = new bootstrap.Modal(document.getElementById("editModal"));
-        editModal.show();
-      });
-    });
-
-
-
-    document.querySelectorAll(".restock-btn").forEach(button =>{
-        button.addEventListener("click", function () {
-
-            document.getElementById("parts_id").value = this.dataset.id;
-            document.getElementById("stocks").value = this.dataset.quantity_stock;
-
-
-            let restockModal = new bootstrap.Modal(document.getElementById("restockModal"));
-            restockModal.show();
-
-
-        });
-    });
-  });
-
-    </script>

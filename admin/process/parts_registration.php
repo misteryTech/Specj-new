@@ -7,6 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = $_POST["category"];
     $services_type = $_POST["services_type"];
     $description = $_POST["description"];
+    $archive = "No";
 
     // Check if the part already exists
     $stmt = $conn->prepare("SELECT batch_number, slug, image FROM parts_registrations WHERE parts_name = ?");
@@ -45,8 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Insert new record
-        $insertStmt = $conn->prepare("INSERT INTO parts_registrations (parts_name, slug, batch_number, manufacturer, category, services_type, description, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $insertStmt->bind_param("ssssssss", $parts_name, $slug, $batch_number, $manufacturer, $category, $services_type, $description, $image);
+        $insertStmt = $conn->prepare("INSERT INTO parts_registrations (parts_name, slug, batch_number, manufacturer, category, services_type, description, image, archive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $insertStmt->bind_param("sssssssss", $parts_name, $slug, $batch_number, $manufacturer, $category, $services_type, $description, $image, $archive);
         $insertStmt->execute();
         $insertStmt->close();
     }

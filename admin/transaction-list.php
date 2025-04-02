@@ -48,7 +48,7 @@ include("side-bar.php");
                       <th scope="col">Total Amount</th>
                       <th scope="col">Transaction</th>
                       <th scope="col">Status</th>
-                      <th scope="col">Date Request</th>
+                      <th scope="col">Date Completed</th>
                       <th scope="col">Action</th>
                     </tr>
                   </thead>
@@ -60,7 +60,7 @@ include("side-bar.php");
                       while ($row = $result->fetch_assoc()) {
                         // Determine the redirection URL based on the transaction type
                         $transactionType = $row['transaction'];
-                        $setDate = date('m/d/Y g:i A', strtotime($row['created_at']));
+                        $setDate = date('m/d/Y g:i A', strtotime($row['date_completed']));
 
                         $detailsPage = ($transactionType === 'Services') ? 'view-services.php' : 'view-products.php';
                         if ($transactionType === 'Service and Product') {

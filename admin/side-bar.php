@@ -84,11 +84,11 @@ if ($result && $row = $result->fetch_assoc()) {
         </li><!-- End Services Nav -->
 
         <!-- Product Nav -->
-        <li class="nav-item <?= in_array($current_page, ['product_information.php', 'product-list.php', 'archive-product.php']) ? 'active' : '' ?>">
+        <li class="nav-item <?= in_array($current_page, ['product_information.php', 'product-list.php', 'archive-product.php', 'expired-list.php']) ? 'active' : '' ?>">
             <a class="nav-link collapsed" data-bs-target="#product-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-box"></i><span>Product</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="product-nav" class="nav-content collapse <?= in_array($current_page, ['product_information.php', 'product-list.php', 'archive-product.php']) ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
+            <ul id="product-nav" class="nav-content collapse <?= in_array($current_page, ['product_information.php', 'product-list.php', 'archive-product.php','expired-list.php']) ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="product_information.php" class="<?= $current_page == 'product_information.php' ? 'active' : '' ?>">
                         <i class="bi bi-circle"></i><span>Register Product</span>
@@ -106,7 +106,7 @@ if ($result && $row = $result->fetch_assoc()) {
                 </li>
 
                 <li>
-                    <a href="expired-product.php" class="<?= $current_page == 'expired-product.php' ? 'active' : '' ?>">
+                    <a href="expired-list.php" class="<?= $current_page == 'expired-list.php' ? 'active' : '' ?>">
                         <i class="bi bi-circle"></i><span>Expired Items</span>
                     </a>
                 </li>

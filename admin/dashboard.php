@@ -141,40 +141,7 @@
 
    
 
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card out-stock">
-
-                
-                <div class="card-body">
-                <h5 class="card-title">Out of stocks</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-box"></i>
-                    </div>
-                    <div class="ps-3">
-                    <h6>
-                      <?php
-                      // Fetch total count of parts that are out of stock or below reorder point
-                      $sql_parts = "SELECT COUNT(*) AS OT FROM parts_registration WHERE quantity_stock <= reorder_point"; 
-                      $result_parts = $conn->query($sql_parts);
-                      $row_parts = $result_parts->fetch_assoc();
-                      echo $row_parts['OT'] ?? 0; // Display 0 if no data
-                      ?>
-                  </h6>
-
-                    </div>
-                  </div>
-                </div>
-
-
-
-
-                
-
-              </div>
-            </div><!-- End Revenue Card -->
-
+            
    
 
             

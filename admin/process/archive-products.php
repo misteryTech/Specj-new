@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
     $id = intval($_GET['id']); // Sanitize the ID
 
     // Update the status to "archived"
-    $stmt = $conn->prepare("UPDATE parts_registration SET archive = '1' WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE parts_registrations SET archive = 'Yes' WHERE id = ?");
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
