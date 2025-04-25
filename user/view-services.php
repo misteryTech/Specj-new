@@ -134,7 +134,7 @@ echo isset($transactionDetails['date_completed']) && !empty($transactionDetails[
                       <th scope="col">Service Type</th>
                       <th scope="col">Price</th>
                       <th scope="col">Status</th>
-                      <th scope="col">Action</th>
+                      <th scope="col">Details</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -150,26 +150,9 @@ echo isset($transactionDetails['date_completed']) && !empty($transactionDetails[
 <td><?php echo number_format($row['price'] ?? 0, 2); ?></td>
 <td><?php echo htmlspecialchars($row['status'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
 <td>
-    <?php echo htmlspecialchars($row['status'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
-</td>
-
-<td>
-<?php if (($row['status'] ?? '') !== 'Scheduled' && $row['status'] !== 'Completed') : ?>
-        <button class="btn btn-primary btn-sm" 
-            onclick="openScheduleModal(
-                <?php echo $row['id']; ?>, 
-                '<?php echo addslashes($row['service_name'] ?? ''); ?>', 
-                '<?php echo addslashes($row['status'] ?? ''); ?>'
-            )">
-            Set Schedule
-        </button>
-        <a href="release-product-page.php?serviceId=<?php echo $row['transaction_id']; ?>" class="btn btn-success btn-sm">
-        Release Product
-    </a>
-    <?php endif; ?>
-
 
 </td>
+
 
                         </tr>
                         <?php

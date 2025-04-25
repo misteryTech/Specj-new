@@ -9,6 +9,7 @@ include("../layout/top-nav.php");
 include("side-bar.php");
 
 
+
 // Check if a transaction ID is provided
 if (!isset($_GET['serviceId'])) {
     echo "<script>alert('Transaction ID is missing.');</script>";
@@ -16,18 +17,18 @@ if (!isset($_GET['serviceId'])) {
     exit();
 }
 
+
 $serviceId = intval($_GET['serviceId']);
 ?>
 
 <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>Services ID: <?= $serviceId ?></h1>
+  <h1>Products</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active">Release Products</li>
+      <li class="breadcrumb-item active">List of Products</li>
     </ol>
-    
     <!-- Cart Button -->
     <div class="text-end mt-3">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cartModal">
@@ -42,7 +43,7 @@ $serviceId = intval($_GET['serviceId']);
 <div class="row g-3">
     <?php
     // Fetch categories and their parts with stock info and images from the database
-    $categorySql = "SELECT DISTINCT category FROM parts_registration ORDER BY category ASC";
+    $categorySql = "SELECT DISTINCT category FROM parts_registrations WHERE archive='No' ORDER BY category ASC";
     $categories = $conn->query($categorySql);
     ?>
 
@@ -73,7 +74,7 @@ $serviceId = intval($_GET['serviceId']);
             $isActive = false;
 
             // Fetch parts for the current category, including stock info and image
-            $partsSql = "SELECT id, parts_name, price, quantity_stock, image FROM parts_registration WHERE category = ?";
+            $partsSql = "SELECT id, parts_name,  batch_number, image FROM parts_registrations WHERE category = ?";
             $stmt = $conn->prepare($partsSql);
             $stmt->bind_param("s", $category);
             $stmt->execute();
@@ -81,51 +82,85 @@ $serviceId = intval($_GET['serviceId']);
 
             echo '<div class="list-group">';
             if ($partsResult->num_rows > 0) {
+                echo '<div class="row row-cols-1 row-cols-md-3 g-3">'; // Responsive card grid
                 while ($row = $partsResult->fetch_assoc()) {
                     $imagePath = !empty($row['image']) ? "../admin/process/{$row['image']}" : 'images/default.jpg';
-                    echo '<button type="button" class="list-group-item list-group-item-action" data-id="' . $row['id'] . '" data-price="' . $row['price'] . '" data-stock="' . $row['quantity_stock'] . '" onclick="selectService(this)">
-                        <div class="d-flex align-items-center">
-                            <img src="' . $imagePath . '" alt="' . $row['parts_name'] . '" class="img-thumbnail" style="width: 50px; height: 50px; margin-right: 10px;">
-                            <div>' . $row['parts_name'] . ' - ₱ ' . number_format($row['price'], 2) . ' (Stock: ' . $row['quantity_stock'] . ')</div>
+            
+                    echo '<div class="col">
+                    <div class="card shadow-sm">
+                        <img src="' . htmlspecialchars($imagePath) . '" class="card-img-top" alt="' . htmlspecialchars($row['parts_name']) . '" style="height: 150px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">' . htmlspecialchars($row['parts_name']) . '</h5>
+                            <button type="button" class="btn btn-primary add-to-cart" data-id="' . htmlspecialchars($row['batch_number']) . '" onclick="addToCart(this)">Add to Cart</button>
                         </div>
-                    </button>';
+                    </div>
+                  </div>';
+            
                 }
+                echo '</div>'; // Close row
             } else {
                 echo '<div class="text-muted">No parts available in this category.</div>';
             }
-            echo '</div>';
-            echo '</div>';
-        }
+                echo '</div>';
+                echo '</div>';
+            }
         ?>
     </div>
 
     <!-- Modal -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul id="selectedProduct" class="list-group"></ul>
-                    <div class="text-end mt-3">
-                        <h5>Total: ₱ <span id="totalPrice">0</span></h5>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <form id="serviceForm" action="process/release-service-product.php" method="POST">
-                        
-                        <input type="hidden" id="selectedproduct" name="selectedproduct">
-                        <input type="hidden" id="services_id" name="services_id" value="<?= $serviceId ?>">
-                        <input type="hidden" id="product_transaction" name="product_transaction" value="Product">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </form>
-                </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+        
+
+         
+            <form id="purchaseForm" action="process/transaction-product.php" method="POST">
+    <!-- Customer Details -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="first_name" class="form-label">Service ID</label>
+            <input type="text" class="form-control" value="<?= $serviceId; ?>" name="service_Id" required>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            <label for="schedule" class="form-label">Date Purchase</label>
+            <input type="date" class="form-control" id="schedule" name="schedule" required>
+        </div>
+    </div>
+
+
+    <!-- Selected Products -->
+    <ul id="selectedProduct" class="list-group mb-3"></ul>
+    <div id="cart-items" class="cart-list"></div>
+
+    <!-- Total Price -->
+    <div class="text-end">
+        <h5>Total: ₱ <span id="totalPrice">0</span></h5>
+    </div>
+
+    <!-- Hidden inputs -->
+    <input type="hidden" id="selectedproduct" name="selectedproduct">
+    <input type="hidden" id="product_transaction" name="product_transaction" value="Product">
+    <input type="hidden" id="total_price" name="total_price">
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-success">Proceed to Payment</button>
+</form>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
+
 </div>
 
 </section>
@@ -136,119 +171,254 @@ $serviceId = intval($_GET['serviceId']);
 include("../layout/footer.php");
 ?>
 
+
 <script>
-// Function to handle service selection
-function selectService(button) {
-    const productId = button.getAttribute('data-id');
-    const serviceName = button.textContent.trim();
-    const price = parseFloat(button.getAttribute('data-price'));
-    const stock = parseInt(button.getAttribute('data-stock'));
-    const image = button.querySelector('img').src;
+   let cart = [];
 
-    const selectedProduct = document.getElementById('selectedProduct');
-    const cartCount = document.getElementById('cartCount');
+function addToCart(button) {
+    let card = button.closest(".card");
+    let productId = button.getAttribute("data-id");
+    let productName = card.querySelector(".card-title").innerText;
+    let productImage = card.querySelector(".card-img-top").src;
 
-    // Check if the service is already selected
-    let existingItem = [...selectedProduct.children].find(item => item.dataset.productId === productId);
-    if (existingItem) {
-        let quantityInput = existingItem.querySelector('.quantityInput');
-        let newQuantity = parseInt(quantityInput.value) + 1;
+    // console.log("Fetching stock for:", productId);
 
-        if (newQuantity > stock) {
-            alert("Not enough stock available!");
+    fetch(`verification/fetch_stock.php?product_id=${productId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+    .then(data => {
+    if (Array.isArray(data) && data.length > 0) {
+        let existingProduct = cart.find(item => item.id === productId);
+
+        // Sort stock batches in ascending order (lowest stock first)
+        data.sort((a, b) => a.stock - b.stock);
+
+        let stockByUnit = {};
+        let batchGroup = data[0].batch_group || "N/A"; // Store batch_group from the first item
+
+        data.forEach(stockItem => {
+            let unit = stockItem.unit || "N/A";
+            let price = parseFloat(stockItem.price) || 0;
+            let stock = parseInt(stockItem.stock) || 0;
+            let batchGroup = stockItem.batch_group || "Unknown"; // Ensure batch_group is assigned correctly
+
+            if (!stockByUnit[unit]) {
+                stockByUnit[unit] = [];
+            }
+            stockByUnit[unit].push({
+                batch: stockItem.batch, 
+                batch_group: batchGroup, // Store batch_group correctly
+                stock: stock, 
+                price: price 
+            });
+        });
+
+        if (!existingProduct) {
+            cart.push({
+                id: productId,
+                name: productName,
+                image: productImage,
+                batch_group: batchGroup, // Store batch_group here
+                stocks: stockByUnit, // Store stock per unit
+                quantities: {} // Initialize empty quantities
+            });
+            updateCartUI();
+        } else {
+            alert("This product is already in your cart!");
+        }
+    } else {
+        alert("Sorry, this item is out of stock!");
+    }
+})
+.catch(error => console.error("Error fetching stock:", error));
+
+}
+
+
+
+function updateCartUI() {
+    let cartContainer = document.getElementById("cart-items");
+    let cartCount = document.getElementById("cartCount");
+    let totalPriceElement = document.getElementById("totalPrice");
+    
+    if (!cartContainer || !cartCount || !totalPriceElement) {
+        console.error("Error: Cart elements not found in the DOM.");
+        return;
+    }
+
+    cartContainer.innerHTML = "";
+    cartCount.innerText = cart.length;
+
+    if (cart.length === 0) {
+        cartContainer.innerHTML = "<p class='text-muted text-center'>Your cart is empty.</p>";
+        totalPriceElement.innerText = "0.00";
+        return;
+    }
+
+    let total = 0;
+    cart.forEach(item => {
+    let itemElement = document.createElement("div");
+    itemElement.classList.add("cart-item", "d-flex", "align-items-center", "border-bottom", "py-2");
+    itemElement.setAttribute("data-id", item.id); // Ensure product ID is set
+
+    let stockHtml = "";
+    let itemSubtotal = 0;
+
+    Object.entries(item.stocks).forEach(([unit, batches]) => {
+        stockHtml += `<p class="mb-1"><strong>${unit}:</strong></p>`;
+
+        
+        batches.forEach((batch, index) => {
+    let batchId = `${item.id}-${unit}-${index}`;
+    let maxStock = batch.stock;
+    let selectedQuantity = item.quantities[batchId] || 0;
+    let subtotal = selectedQuantity * batch.price;
+    itemSubtotal += subtotal;
+
+    stockHtml += `
+<div class="d-flex align-items-center mb-2 cart-batch" 
+     data-product-id="${item.id}"  
+     data-batch-group="${batch.batch_group}" 
+     data-price="${batch.price}" 
+     data-quantity="${selectedQuantity}" 
+     data-subtotal="${subtotal}" 
+     data-stock="${batch.stock}"> <!-- ✅ Ensure stock is included -->
+
+    <span class="me-2 text-muted">Batch Group: <strong>${batch.batch_group}</strong></span>
+    <span class="me-2 text-muted">${batch.stock} in stock @ ₱${batch.price.toFixed(2)}</span>
+
+    <input type="number" id="${batchId}" class="form-control form-control-sm text-center me-2" 
+           value="${selectedQuantity}" min="0" max="${batch.stock}" 
+           data-product-id="${item.id}" data-unit="${unit}" data-batch-index="${index}" 
+           oninput="updateQuantity(this)" style="width: 60px;">
+
+    <span class="subtotal ms-2 fw-bold">₱${subtotal.toFixed(2)}</span>
+</div>
+
+    `;
+});
+
+    });
+
+    total += itemSubtotal;
+
+    itemElement.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" class="cart-img me-3" 
+             style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+        <div class="cart-details flex-grow-1">
+            <h5 class="mb-1">${item.name}</h5>
+            ${stockHtml}
+            <p class="fw-bold text-end">Total: ₱<span class="item-total">${itemSubtotal.toFixed(2)}</span></p>
+        </div>
+        <button class="btn btn-danger btn-sm ms-3" onclick="removeFromCart('${item.id}')">
+            <i class="bi bi-trash"></i>
+        </button>
+    `;
+
+    cartContainer.appendChild(itemElement);
+});
+
+    totalPriceElement.innerText = total.toFixed(2);
+}
+
+
+
+function updateQuantity(input) {
+    let productId = input.getAttribute("data-product-id");
+    let unit = input.getAttribute("data-unit");
+    let batchIndex = parseInt(input.getAttribute("data-batch-index"));
+    let newQuantity = parseInt(input.value) || 0;
+
+    let cartItem = cart.find(item => item.id === productId);
+    if (!cartItem) return;
+
+    let batch = cartItem.stocks[unit][batchIndex];
+    if (!batch) return;
+
+    if (newQuantity > batch.stock) {
+        input.value = batch.stock; // Prevent over-purchasing
+        newQuantity = batch.stock;
+    }
+
+    cartItem.quantities[`${productId}-${unit}-${batchIndex}`] = newQuantity;
+    updateCartUI();
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartUI();
+}
+
+
+
+
+document.getElementById('purchaseForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent default submission
+
+    let selectedProducts = [];
+    let totalPrice = 0;
+    let batchesToRemove = [];
+
+    document.querySelectorAll('.cart-batch').forEach(batch => {
+        let productId = batch.getAttribute('data-product-id');
+        let batchGroup = batch.getAttribute('data-batch-group');
+        let quantity = parseInt(batch.getAttribute('data-quantity')) || 0;
+        let unitPrice = parseFloat(batch.getAttribute('data-price')) || 0;
+        let subtotal = parseFloat(batch.getAttribute('data-subtotal')) || 0;
+        let stockAvailable = parseInt(batch.getAttribute('data-stock')) || 0;
+
+        if (stockAvailable === 0) {
+            alert(`Stock is unavailable for batch ${batchGroup}. It will be removed.`);
+            batchesToRemove.push(batch); // Mark for removal
             return;
         }
 
-        quantityInput.value = newQuantity;
-        existingItem.querySelector('.serviceTotal').textContent = '₱ ' + (newQuantity * price).toLocaleString('en-PH', { minimumFractionDigits: 2 });
-        updateTotal();
-        updateCartCount();
-        return;
-    }
+        totalPrice += subtotal;
 
-    // Create a list item for the selected service
-    const listItem = document.createElement('li');
-    listItem.className = "list-group-item d-flex justify-content-between align-items-center";
-    listItem.dataset.productId = productId;
-    listItem.dataset.price = price;
-    listItem.dataset.stock = stock;
-    listItem.innerHTML = `
-        <div class="d-flex align-items-center">
-            <img src="${image}" alt="${serviceName}" class="img-thumbnail" style="width: 50px; height: 50px; margin-right: 10px;">
-            <div>${serviceName} - ₱ <span class="servicePrice">${price.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span>
-            </div>
-            
-            <label>Quantity</label>
+        if (!productId) {
+            console.error("❌ Missing product_id for batch:", batch);
+            return;
+        }
 
-            <input type="number" class="form-control form-control-sm quantityInput" value="1" min="1" max="${stock}" style="width: 60px;" onchange="updateItemTotal(this)">
-            <span class="serviceTotal">₱ ${price.toLocaleString('en-PH', { minimumFractionDigits: 2 })}</span>
-            <button type="button" class="btn btn-sm btn-danger removeService">Remove</button>
-        </div>
-    `;
-    selectedProduct.appendChild(listItem);
+        let existingProduct = selectedProducts.find(p => p.id === productId);
+        if (!existingProduct) {
+            existingProduct = { id: productId, batches: [] };
+            selectedProducts.push(existingProduct);
+        }
 
-    updateTotal();
-    updateCartCount();
-}
-
-// Update total price
-function updateTotal() {
-    let totalPrice = 0;
-    const selectedproduct = [];
-
-    // Loop through each selected product and calculate the total price
-    document.querySelectorAll("#selectedProduct li").forEach(item => {
-        const productId = item.dataset.productId;
-        const quantity = parseInt(item.querySelector('.quantityInput').value);
-        const price = parseFloat(item.dataset.price);
-
-        // Calculate total price for this item
-        totalPrice += quantity * price;
-
-        // Add this item to the selected product list
-        selectedproduct.push({ productId: productId, quantity: quantity });
+        existingProduct.batches.push({
+            batch_group: batchGroup,
+            quantity: quantity,
+            price: unitPrice,
+            subtotal: subtotal,
+        });
     });
 
-    // Update the total price in the modal
-    document.getElementById("totalPrice").textContent = totalPrice.toLocaleString('en-PH', { minimumFractionDigits: 2 });
+    // Remove out-of-stock items
+    batchesToRemove.forEach(batch => batch.remove());
 
-    // Save the selected products in the hidden input field for form submission
-    document.getElementById("selectedproduct").value = JSON.stringify(selectedproduct);
-}
-
-
-
-
-// Update cart item count
-function updateCartCount() {
-    const cartCount = document.getElementById('cartCount');
-    const totalItems = document.querySelectorAll("#selectedProduct li").length;
-    cartCount.textContent = totalItems;
-}
-
-// Update individual item total when quantity changes
-function updateItemTotal(input) {
-    const listItem = input.closest('li');
-    const quantity = parseInt(input.value);
-    const price = parseFloat(listItem.dataset.price);
-    const total = quantity * price;
-
-    if (quantity > parseInt(listItem.dataset.stock)) {
-        alert("Not enough stock available!");
-        input.value = listItem.querySelector('.quantityInput').value;
+    // Check if cart is empty
+    if (selectedProducts.length === 0) {
+        alert("All selected items are out of stock. Please add available items to proceed.");
         return;
     }
 
-    listItem.querySelector('.serviceTotal').textContent = '₱ ' + total.toLocaleString('en-PH', { minimumFractionDigits: 2 });
-    updateTotal();
-}
+    console.log("🛒 Selected Products:", selectedProducts); // Debug output
 
-// Remove selected service
-document.getElementById('selectedProduct').addEventListener('click', function(e) {
-    if (e.target.classList.contains('removeService')) {
-        e.target.closest('li').remove();
-        updateTotal();
-        updateCartCount();
-    }
+    // Set values in form
+    document.getElementById('selectedproduct').value = JSON.stringify(selectedProducts);
+    document.getElementById('total_price').value = totalPrice.toFixed(2);
+
+    this.submit();
 });
+
+
+
+
+
+
 </script>

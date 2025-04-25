@@ -60,7 +60,10 @@ include("side-bar.php");
                       while ($row = $result->fetch_assoc()) {
                         // Determine the redirection URL based on the transaction type
                         $transactionType = $row['transaction'];
-                        $setDate = date('m/d/Y g:i A', strtotime($row['date_completed']));
+                        $setDate = !empty($row['date_completed']) 
+                        ? date('m/d/Y g:i A', strtotime($row['date_completed'])) 
+                        : 'N/A'; // or whatever fallback you want
+                    
 
                         $detailsPage = ($transactionType === 'Services') ? 'view-services.php' : 'view-products.php';
                         if ($transactionType === 'Service and Product') {
